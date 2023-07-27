@@ -1,11 +1,10 @@
-import reactLogo from "../assets/react.svg";
 import { useEffect, useState } from "react";
 import { URL } from "../constant/constant";
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
-import Profile from "./Profile";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
+import { useGetUserQuery } from "../services/userApi";
 
 interface User {
   username: string;
@@ -15,45 +14,11 @@ interface User {
   email: string;
 }
 function Main() {
-  const [user, setUser] = useState<User>({
-    username: "",
-    password: "",
-    role: "",
-    fullname: "",
-    email: "",
-  });
-  const [userToken, setUserToken] = useState<string | null>(() =>
-    localStorage.getItem("userToken")
-  );
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!userToken) return;
-    const getUserInfo = async () => {
-      setIsLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`${URL}/user/me`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            token: "Bearer " + userToken,
-          },
-        });
-        if (!res.ok) throw new Error("get user failed");
-        const data = await res.json();
-        console.log(data);
-        setUser(data);
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getUserInfo();
-  }, []);
+  const { data, error, isLoading } = useGetUserQuery();
+  console.log(data, error, isLoading);
+  // const [userToken, setUserToken] = useState<string | null>(() =>
+  //   localStorage.getItem("userToken")
+  // );
 
   return (
     <div className="m-auto">

@@ -4,11 +4,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 function CatchLogin() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  console.log(searchParams);
   const accessToken = searchParams.get("accessToken");
   const refreshToken = searchParams.get("refreshToken");
-  console.log(accessToken);
-  console.log(refreshToken);
 
   localStorage.setItem(
     "userToken",

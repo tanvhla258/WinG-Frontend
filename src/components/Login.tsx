@@ -3,12 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { URL } from "../constant/constant";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import {
+  useLoginWithEmailMutation,
+  useLoginWithUsernameMutation,
+} from "../services/authApi";
+import { useForm, SubmitHandler } from "react-hook-form";
+
 interface User {
   // Define the structure of the user object
   id: number;
   username: string;
   // Add other properties as needed
 }
+type FormValues = {
+  username: string;
+  password: string;
+};
 
 function Loader() {
   return <p className="loader">Loading...</p>;
@@ -31,132 +41,150 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
-      // Make a request to the login endpoint with the username and password
-      const res = await fetch(`${URL}/login/oauth2/google/authorization`, {
-        method: "GET",
-      });
+  const [loginUser, { data, isSuccess, isError }] = useLoginWithEmailMutation();
+  const { register, handleSubmit } = useForm<FormValues>();
+  console.log(loginUser);
+  // const handleGoogleLogin = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     setError("");
+  //     // Make a request to the login endpoint with the username and password
+  //     const res = await fetch(`${URL}/login/oauth2/google/authorization`, {
+  //       method: "GET",
+  //     });
 
-      if (!res.ok) throw new Error("Login failed");
+  //     if (!res.ok) throw new Error("Login failed");
 
-      const data = await res.json();
-      console.log(data);
-      const win: Window = window;
-      win.location = data.message;
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const { username, password } = event.currentTarget.elements as unknown as {
-      username: { value: string };
-      password: { value: string };
-    };
-
-    try {
-      setIsLoading(true);
-      setError("");
-      // Make a request to the login endpoint with the username and password
-      const res = await fetch(`${URL}/login/basic`, {
-        method: "POST",
-        body: JSON.stringify({
-          username: username.value,
-          password: password.value,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!res.ok) throw new Error("Login failed");
-
-      const data = await res.json();
-      setUser(data);
-      localStorage.setItem("userToken", data.accessToken);
-      localStorage.setItem("isAuthen", "true");
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Oops...",
-      //   text: "Login failed!",
-      // });
+  //     const data = await res.json();
+  //     console.log(data);
+  //     const win: Window = window;
+  //     win.location = data.message;
+  //   } catch (error: any) {
+  //     setError(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  useEffect(() => {
+    if (isSuccess) {
+      Swal.fire({ title: "Success login" });
       navigate("/");
-    } catch (error: any) {
-      console.log(error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Login failed!",
-      });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  });
 
-  console.log(user);
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+    const phoneRegex = new RegExp("^([0-9]){10,16}$");
+
+    const { username, password } = data;
+    if (username && password) {
+      await loginUser({ email: username, password });
+    } else {
+      console.log("input wrong");
+    }
+
+    // try {
+    //   setIsLoading(true);
+    //   setError("");
+    //   // Make a request to the login endpoint with the username and password
+    //   const loginURL = `${URL}/login/basic/${
+    //     emailRegex.test(username.value) ? "email" : "username"
+    //   }-password`;
+    //   console.log(loginURL);
+    //   const res = emailRegex.test(username.value)
+    //     ? await fetch(loginURL, {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //           email: username.value,
+    //           password: password.value,
+    //         }),
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       })
+    //     : await fetch(loginURL, {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //           username: username.value,
+    //           password: password.value,
+    //         }),
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       });
+
+    //   if (!res.ok) throw new Error("Login failed");
+
+    //   const data = await res.json();
+    //   setUser(data);
+    //   localStorage.setItem("userToken", data.accessToken);
+    //   localStorage.setItem("isAuthen", "true");
+
+    //   navigate("/");
+    // } catch (error: any) {
+    //   console.log(error.message);
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "Login failed!",
+    //   });
+    // } finally {
+    //   setIsLoading(false);
+    // }
+  };
 
   return (
     <div className="flex justify-between max-w-screen-lg m-auto items-center h-screen">
       <div>
         <h1 className=" text-7xl text-blue font-bold">WinG</h1>
       </div>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="bg-white w-4/12 rounded p-4">
-          <form onSubmit={handleFormSubmit}>
-            <input
-              className="bg-white w-full border-2 p-2 rounded mb-2"
-              type="text"
-              required
-              id="username"
-              name="username"
-              placeholder="Email address or phone number"
-            />
-            <br />
 
-            <input
-              className="bg-white w-full border-2 p-2 rounded mb-2"
-              type="password"
-              required
-              id="password"
-              name="password"
-              placeholder="Password"
-            />
-            <br />
+      <div className="bg-white w-4/12 rounded p-4">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            className="bg-white w-full border-2 p-2 rounded mb-2"
+            type="text"
+            required
+            id="username"
+            {...register("username")}
+            placeholder="Email address or username"
+          />
+          <br />
 
-            <button
-              className="bg-blue text-white mb-3 p-2 w-full rounded"
-              type="submit"
-            >
-              Login
-            </button>
-          </form>
+          <input
+            className="bg-white w-full border-2 p-2 rounded mb-2"
+            type="password"
+            required
+            id="password"
+            placeholder="Password"
+            {...register("password")}
+          />
+          <br />
+
           <button
-            onClick={() => handleGoogleLogin()}
-            className="bg-yellow text-white mb-3 p-2 w-full rounded"
+            className="bg-blue text-white mb-3 p-2 w-full rounded"
+            type="submit"
           >
-            Login with google account
+            Login
           </button>
-          <Link className="text-blue mb-3  underline block  text-center" to="#">
-            Forgotten password?
-          </Link>
-          <p className="block text-center mb-3">or</p>
-          <Link
-            className="bg-green-200 p-2 rounded  block text-center"
-            to="/signup"
-          >
-            Create new account
-          </Link>
-        </div>
-      )}
-      {error && <ErrorMessage message={error} />}
+        </form>
+        <button
+          // onClick={() => handleGoogleLogin()}
+          className="bg-yellow text-white mb-3 p-2 w-full rounded"
+        >
+          Login with google account
+        </button>
+        <Link className="text-blue mb-3  underline block  text-center" to="#">
+          Forgotten password?
+        </Link>
+        <p className="block text-center mb-3">or</p>
+        <Link
+          className="bg-green-200 p-2 rounded  block text-center"
+          to="/signup"
+        >
+          Create new account
+        </Link>
+      </div>
     </div>
   );
 }

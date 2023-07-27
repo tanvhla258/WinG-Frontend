@@ -12,7 +12,7 @@ function Post() {
         <div className="flex mb-3 gap-2 ">
           <img
             className="inline-block h-10 w-10 rounded-full "
-            src={`${URL}/user/get_avatar?username=tan`}
+            // src={`${URL}/user/get_avatar?username=tan`}
             alt="{user.handle}"
           />
           <div className="text-slate-500">
