@@ -4,7 +4,6 @@ import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
-import { useGetUserQuery } from "../services/userApi";
 
 interface User {
   username: string;
@@ -13,13 +12,24 @@ interface User {
   fullname: string;
   email: string;
 }
+
 function Main() {
-  const { data, error, isLoading } = useGetUserQuery();
-  console.log(data, error, isLoading);
   // const [userToken, setUserToken] = useState<string | null>(() =>
   //   localStorage.getItem("userToken")
   // );
-
+  useEffect(function () {
+    const fetchUser = async function () {
+      try {
+        const res = await fetch(`${URL}/user/me`, {
+          method: "GET",
+          headers: {
+            token: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+      } catch (e) {}
+    };
+    fetchUser();
+  });
   return (
     <div className="m-auto">
       <TopBar />

@@ -4,20 +4,24 @@ import type { UserData } from "../../types/model"
 import type { RootState } from '../../redux/store'
 
 type AuthState = {
-  user: UserData | null
-  token: string | null
+  // user: UserData | null
+  accessToken: string | null
+  refreshToken: string | null
+
 }
 
 const slice = createSlice({
   name: 'auth',
-  initialState: { user: null, token: null } as AuthState,
+  initialState: { accessToken: null, refreshToken: null } as AuthState,
   reducers: {
     setCredentials: (
       state,
-      { payload: { user, token } }: PayloadAction<{ user: UserData; token: string }>
+      { payload: {  accessToken,refreshToken } }: PayloadAction<{ refreshToken: string; accessToken: string }>
     ) => {
-      state.user = user
-      state.token = token
+      // state.user = user
+      state.accessToken = accessToken
+      state.refreshToken = refreshToken
+
     },
   },
 })

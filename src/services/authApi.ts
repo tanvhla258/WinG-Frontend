@@ -20,7 +20,7 @@ export const authApi = createApi({
           method: 'POST',
           body: loginData,
         }),
-       
+    
       }),
       // Add other authentication endpoints as needed: logout, registration, etc.
     }),
