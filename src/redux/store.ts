@@ -2,13 +2,21 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { userApi } from '../services/userApi'
 import { authApi } from '../services/authApi'
-
+import { postApi } from '../services/postApi'
+import authSlice from '../features/auth/authSlice'
+import userSlice from '../features/user/userSlice'
+import postSlice from '../features/post/postSlice'
 import { combineReducers } from '@reduxjs/toolkit'
 import type { PreloadedState } from '@reduxjs/toolkit'
 
 const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
+  [postApi.reducerPath]: postApi.reducer,
+
+  auth: authSlice, // Add your authSlice reducer here
+  user: userSlice, // Add your userSlice reducer here
+  post: postSlice, // Add your userSlice reducer here
 
 })
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -18,7 +26,7 @@ return  configureStore({
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(userApi.middleware,authApi.middleware),
+    getDefaultMiddleware().concat(userApi.middleware,authApi.middleware,postApi.middleware),
     preloadedState 
 })
 }

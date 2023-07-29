@@ -20,7 +20,6 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/catch_token" element={<CatchLogin />}></Route>
-
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
         </Routes>

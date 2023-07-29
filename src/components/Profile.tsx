@@ -5,72 +5,31 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Post from "./Post";
 import CreatePost from "./CreatePost";
 import TopBar from "./TopBar";
-interface FormValues {
-  file: FileList;
-}
-function Loader() {
-  return <p className="loader">Loading...</p>;
-}
-
-interface ErrorMessageProps {
-  message: string;
-}
-
-function ErrorMessage({ message }: ErrorMessageProps) {
-  return (
-    <p className="error">
-      <span>⛔️</span> {message}
-    </p>
-  );
-}
+import { useAppSelector } from "../hooks";
+import Avatar from "./Avatar";
+import { useGlobalContext } from "./AppLayout";
+import SetAvatarForm from "./setAvatarForm";
 
 function Profile() {
-  const [user, setUser] = useState<User | null>(null); // Set the initial state as null
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  // const { register, handleSubmit } = useForm<FormValues>();
-  const [userToken, setUserToken] = useState<string | null>(() =>
-    localStorage.getItem("userToken")
-  );
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
-    const formData = new FormData();
-    formData.append("file", data.file[0]);
-    try {
-      setIsLoading(true);
-      setError("");
-      const res = await fetch(`${URL}/file/uploadAvatar`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          token: "Bearer " + userToken,
-        },
-      });
-      // Make a request to the Profile endpoint with the username and password
-
-      if (!res.ok) throw new Error("post failed");
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  console.log(user);
+  const user = useAppSelector((state) => state.user.user);
+  const { setModalActive, setModalContent } = useGlobalContext();
 
   return (
     <div>
       <TopBar />
       <div className="max-w-screen-lg mt-5 m-auto">
         <div className="flex mb-8 gap-3 items-end">
-          <img
-            className="inline-block cursor-pointer h-32 w-32 rounded-full ring-2 ring-white"
-            src={`${URL}/user/get_avatar?username=tan`}
-            alt="{user.handle}"
+          <Avatar
+            onClick={() => {
+              setModalActive(true);
+              setModalContent(<SetAvatarForm />);
+            }}
+            src={user?.avatarURL}
+            size={32}
+            ring={true}
           />
           <div className="flex flex-col gap-2">
-            <p className="font-bold text-4xl">Quang Tan</p>
+            <p className="font-bold text-4xl">{user?.fullName}</p>
             <p className="text-slate-500">100 friends</p>
             <div>Avatar List</div>
           </div>

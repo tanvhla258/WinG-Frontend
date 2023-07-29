@@ -1,22 +1,16 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { URL } from "../constant/constant";
-import icon from "../assets/icon.png";
 import { IoMdNotifications } from "react-icons/io";
 import { BiSolidMessageRoundedDots } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-interface userProps {
-  id: number;
-  username: string;
-  fullName: string;
-  email: string;
-}
+import { useAppSelector } from "../hooks";
+import Avatar from "./Avatar";
+
 function TopBar() {
-  const [avatar, setavatar] = useState<String>("");
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const user = useAppSelector((state) => state.user.user);
   function toggleAvatar() {
     setAvatarDropDown((toggle: boolean) => !toggle);
   }
@@ -29,7 +23,7 @@ function TopBar() {
         >
           <img
             className="object-contain rounded-full"
-            src={`https://genk.mediacdn.vn/2018/9/15/3632-1537022007381908098882.jpg`}
+            src={`${URL}/public/general?file_name=WinG_logo.webp`}
             alt="app icon"
           />
           <h1 className=" text-2xl text-blue font-bold">WinG</h1>
@@ -41,16 +35,16 @@ function TopBar() {
           <button className="rounded-full hover:bg-slate-400 bg-slate-300 p-2">
             <IoMdNotifications size={30} />
           </button>
-          <img
+
+          <Avatar
             onClick={() => toggleAvatar()}
-            className="inline-block cursor-pointer h-12 w-12 rounded-full ring-2 ring-white"
-            src={`${URL}/user/get_avatar?username=tan`}
-            alt="{user.handle}"
+            src={user?.avatarURL}
+            size={12}
           />
           {avatarDropDown || (
             <div
               id="dropdown"
-              className="z-10 top-12 right-0 border-2 border-slate-200 absolute text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+              className="z-100 top-12 right-0 border-2 border-slate-200 absolute text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
             >
               <ul className="py-2">
                 <li>

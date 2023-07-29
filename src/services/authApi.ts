@@ -1,14 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { UserData } from '../types/model'
 import { URL } from '../constant/constant'
-import { userApi } from './userApi';
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: `${URL}/login/` }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${URL}/` }),
     endpoints: (builder) => ({
       loginWithUsername: builder.mutation({
         query: (loginData) => ({
-          url: 'basic/username-password',
+          url: 'login/basic/username-password',
           method: 'POST',
           body: loginData,
         }),
@@ -16,9 +14,16 @@ export const authApi = createApi({
       }),
       loginWithEmail: builder.mutation({
         query: (loginData) => ({
-          url: 'basic/email-password',
+          url: 'login/basic/email-password',
           method: 'POST',
           body: loginData,
+        }),
+      }),
+      register: builder.mutation({
+        query: (registerData) => ({
+          url: 'register/basic',
+          method: 'POST',
+          body: registerData,
         }),
     
       }),
@@ -26,4 +31,4 @@ export const authApi = createApi({
     }),
   });
   
-  export const { useLoginWithEmailMutation,useLoginWithUsernameMutation } = authApi;
+  export const {useRegisterMutation, useLoginWithEmailMutation,useLoginWithUsernameMutation } = authApi;

@@ -4,7 +4,7 @@ type Props = {
 };
 function ModalLayout({ children }: Props) {
   return (
-    <div className="bg-white w-fit h-fit inset-0 rounded z-20	 p-4 absolute m-auto">
+    <div className="bg-white w-fit h-fit inset-0 rounded z-1000	 p-4 absolute m-auto">
       {children}
     </div>
   );

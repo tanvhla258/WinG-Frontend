@@ -56,8 +56,9 @@ function Login() {
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({ icon: "success", title: "Success login" });
-      localStorage.setItem("token", loginData.accessToken);
+      localStorage.setItem("token", loginData.refreshToken);
       dispatch(setCredentials(loginData));
+      console.log("set new credentials");
       navigate("/");
     }
   }, [isSuccess]);

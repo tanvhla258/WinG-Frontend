@@ -1,14 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
-import { setUser } from '../features/user/userSlice';
-import { useDispatch, useSelector } from 'react-redux'; // Add this import for accessing the Redux state
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
+import { addPost, setPost } from '../features/post/postSlice';
 
 // Define a service using a base URL and expected endpoints
 
-export const userApi = createApi({
-  reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/user/`, 
+export const postApi = createApi({
+  reducerPath: 'postApi',
+  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/post/`, 
   prepareHeaders: (headers,{ getState}) => {
     // Add the token to the Authorization header if available
     const token =  (getState() as RootState).auth.accessToken
@@ -22,24 +21,43 @@ export const userApi = createApi({
   },
  }),
   endpoints: (builder) => ({
-    getUser: builder.query({
+    getOnwPosts: builder.query({
       query() {
         return {
           url: 'me',
         };
       },
-   
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
       try {
         const { data } = await queryFulfilled;
-        console.log(data)
-        dispatch(setUser({avatarURL:data.avatarURL,id:data.id,fullName:data.full_name,username:data.user_name}));
-      } catch (error) {}
+        console.log(data);
+        dispatch(setPost(data));
+      } catch (error) {
+      }
     },
   }),
+  createPost: builder.mutation({
+    query(postData) {
+      return {
+        url: '/create',
+        method: 'POST',
+
+        body: postData,
+      };
+    },
+  async onQueryStarted(args, { dispatch, queryFulfilled }) {
+    try {
+      const { data } = await queryFulfilled;
+      console.log(data);
+      dispatch(addPost(data));
+    } catch (error) {
+      console.log("query wrong")
+    }
+  },
+}),
 })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserQuery } = userApi
+export const { useCreatePostMutation, useGetOnwPostsQuery } = postApi

@@ -22,7 +22,6 @@ export const useGlobalContext = () => useContext(MyGlobalContext);
 function AppLayout({ children }: Props) {
   const [modalActive, setModalActive] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<JSX.Element>(<></>);
-  console.log("app layout work 2");
   return (
     <div
       className={`${

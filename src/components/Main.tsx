@@ -4,43 +4,37 @@ import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
-
-interface User {
-  username: string;
-  password: string;
-  role: string;
-  fullname: string;
-  email: string;
-}
+import { useGetUserQuery } from "../services/userApi";
+import { useAppSelector } from "../hooks";
+import { useGetOnwPostsQuery } from "../services/postApi";
+import PostList from "./PostList";
 
 function Main() {
-  // const [userToken, setUserToken] = useState<string | null>(() =>
-  //   localStorage.getItem("userToken")
-  // );
-  useEffect(function () {
-    const fetchUser = async function () {
-      try {
-        const res = await fetch(`${URL}/user/me`, {
-          method: "GET",
-          headers: {
-            token: "Bearer " + localStorage.getItem("token"),
-          },
-        });
-      } catch (e) {}
-    };
-    fetchUser();
-  });
+  const { data, isLoading, error, isSuccess } = useGetUserQuery();
+  const {
+    data: postData,
+    isLoading: isLoadingPost,
+    error: postError,
+    isSuccess: isSucessPost,
+  } = useGetOnwPostsQuery();
+  console.log(postData, data);
+
+  const user = useAppSelector((state) => state.user);
+
+  console.log(data, postData, user);
   return (
-    <div className="m-auto">
-      <TopBar />
-      <div className=" max-w-screen-lg flex gap-4 py-4  flex-row m-auto">
-        <div className="basis-1/4">
+    <div className="m-auto ">
+      <div className="sticky top-0 z-50">
+        <TopBar />
+      </div>
+      <div className="max-w-screen-lg flex gap-4 py-4 h-screen  flex-row m-auto">
+        <div className="basis-1/4 sticky top-50 z-40">
           <Sidebar />
         </div>
         <div className="basis-3/4">
           <CreatePost />
           <div className="mb-3"></div>
-          <Post />
+          <PostList />
         </div>
       </div>
     </div>
