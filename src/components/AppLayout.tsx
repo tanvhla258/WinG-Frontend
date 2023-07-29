@@ -4,6 +4,7 @@ type Props = {
 };
 import { useState } from "react";
 import ModalLayout from "./ModalLayout";
+import TopBar from "./TopBar";
 export type GlobalContent = {
   modalActive: boolean;
   setModalActive: (data: boolean) => void;
@@ -31,6 +32,7 @@ function AppLayout({ children }: Props) {
       <MyGlobalContext.Provider
         value={{ modalContent, setModalContent, modalActive, setModalActive }}
       >
+        <TopBar />
         {children}
         {
           <div

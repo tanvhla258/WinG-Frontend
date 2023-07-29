@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { IPost } from '../../types/model'
+import { IComment, IPost } from '../../types/model'
 
   
   // Define the initial state using that type
   interface IPostListState {
-    ownPosts: Array<IPost>
-    publicPosts: Array<IPost>
-
+    posts: Array<IPost>
+    comments:Array<IComment> | null
   }
   const initialState: IPostListState = {
-    ownPosts: [],
-    publicPosts:[]
+    posts:[],
+    comments:[]
   }
 
   export const postSlice = createSlice({
@@ -19,15 +18,18 @@ import { IPost } from '../../types/model'
     initialState,
     reducers: {
       addPost: (state, action: PayloadAction<IPost>) => {
-        state.ownPosts = [...state.ownPosts,action.payload]
+        state.posts = [...state.posts,action.payload]
       },
       setPost: (state, action: PayloadAction<Array<IPost>>) => {
-        state.ownPosts = action.payload;
+        state.posts = action.payload;
       },
-    },
+    
+      setComment: (state, action: PayloadAction<Array<IComment>>) => {
+        state.comments = action.payload;
+      },},
   })
   
-  export const { addPost,setPost } = postSlice.actions
+  export const { addPost,setComment,setPost } = postSlice.actions
   
   // Other code such as selectors can use the imported `RootState` type
   

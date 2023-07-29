@@ -8,17 +8,24 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import Avatar from "./Avatar";
 import { logout } from "../features/user/userSlice";
 import { clearToken } from "../features/auth/authSlice";
+import { useGetUserQuery } from "../services/userApi";
+import Loader from "./Loader";
 
 function TopBar() {
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { data: userData, refetch, isLoading } = useGetUserQuery();
   const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
   function toggleAvatar() {
     setAvatarDropDown((toggle: boolean) => !toggle);
   }
+  useEffect(function () {
+    refetch();
+  }, []);
+  if (isLoading) return <Loader />;
   return (
-    <div className="bg-white w-full py-2">
+    <div className="bg-white w-full z-30 py-2 sticky top-0">
       <div className=" flex justify-between items-center max-w-screen-lg m-auto">
         <div
           onClick={() => navigate("/")}
@@ -41,7 +48,7 @@ function TopBar() {
 
           <Avatar
             onClick={() => toggleAvatar()}
-            src={user?.avatarURL}
+            src={userData?.avatarURL}
             size={"h-12 w-12"}
           />
           {avatarDropDown || (
@@ -52,7 +59,9 @@ function TopBar() {
               <ul className="py-2">
                 <li>
                   <a
-                    onClick={() => navigate(`/profile?username=${"tan"}`)}
+                    onClick={() =>
+                      navigate(`/profile?username=${user?.username}`)
+                    }
                     className="block cursor-pointer select-none	 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Profile

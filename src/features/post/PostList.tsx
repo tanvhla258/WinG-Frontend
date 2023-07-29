@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IPost } from "../../types/model";
 import Post from "./Post";
-import { useGetOnwPostsQuery } from "../../services/postApi";
-function PostList() {
-  const { data: posts, isLoading } = useGetOnwPostsQuery();
 
+function PostList({ posts }: { posts: Array<IPost> | null }) {
+  if (!posts || posts.length == 0) return;
   return (
     <div className="gap-8 flex flex-col">
       {posts?.map((post) => (

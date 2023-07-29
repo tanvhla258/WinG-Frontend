@@ -4,7 +4,7 @@ import Loader from "../components/Loader";
 import { setCredentials } from "../features/auth/authSlice";
 import { useAppDispatch } from "../hooks";
 const RequireUser = () => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("refreshToken");
   const refreshToken = localStorage.getItem("refreshToken");
 
   const location = useLocation();

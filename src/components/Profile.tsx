@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { URL } from "../constant/constant";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Post from "../features/post/Post";
@@ -8,33 +8,49 @@ import TopBar from "./TopBar";
 import { useAppSelector } from "../hooks";
 import Avatar from "./Avatar";
 import { useGlobalContext } from "./AppLayout";
-import SetAvatarForm from "./setAvatarForm";
-import { useGetOnwPostsQuery } from "../services/postApi";
+import SetAvatarForm from "../features/user/SetAvatarForm";
 import PostList from "../features/post/PostList";
+import { useGetUserProfileQuery } from "../services/publicApi";
+import Loader from "./Loader";
+import AddFriendButton from "./AddFriendButton";
+import { useGetProfilePostQuery } from "../services/postApi";
 
 function Profile() {
-  const user = useAppSelector((state) => state.user.user);
-  const { data: posts } = useGetOnwPostsQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const username = searchParams.get("username");
+  const { data: user, isLoading } = useGetUserProfileQuery({
+    username: username,
+    id: "",
+  });
+  const { data: postData, isLoading: postLoaidng } = useGetProfilePostQuery({
+    username,
+  });
   const { setModalActive, setModalContent } = useGlobalContext();
-
+  if (isLoading && postLoaidng) return <Loader />;
+  console.log(postData);
   return (
     <div>
-      <TopBar />
       <div className="max-w-screen-lg mt-5 m-auto">
-        <div className="flex mb-8 gap-3 items-end">
-          <Avatar
-            onClick={() => {
-              setModalActive(true);
-              setModalContent(<SetAvatarForm />);
-            }}
-            src={user?.avatarURL}
-            size={"h-32 w-32"}
-            ring={true}
-          />
+        <div className="bg-white rounded mb-8  p-6 flex justify-between items-end">
+          <div className="flex gap-3 items-end">
+            <Avatar
+              onClick={() => {
+                setModalActive(true);
+                setModalContent(<SetAvatarForm />);
+              }}
+              src={user?.avatarURL}
+              size={"h-32 w-32"}
+              ring={true}
+            />
+
+            <div className="flex flex-col gap-2">
+              <p className="font-bold text-4xl">{user?.full_name}</p>
+              <p className="text-slate-500">100 friends</p>
+              <div>Avatar List</div>
+            </div>
+          </div>
           <div className="flex flex-col gap-2">
-            <p className="font-bold text-4xl">{user?.fullName}</p>
-            <p className="text-slate-500">100 friends</p>
-            <div>Avatar List</div>
+            <AddFriendButton />
           </div>
         </div>
         <div className="flex gap-4 justify-between">
@@ -42,30 +58,9 @@ function Profile() {
           <div className="basis-2/3">
             <CreatePost />
             <div className="mb-3"></div>
-            <PostList />
+            <PostList posts={postData} />
           </div>
         </div>
-        {/* {isLoading ? (
-        <Loader />
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input
-            className="file:mr-4 file:py-2 file:px-4
-            file:rounded-full file:border-0
-            file:text-sm file:font-semibold
-            file:bg-violet-50 file:text-blue
-            hover:file:bg-violet-100"
-            type="file"
-            id="avatar"
-            {...register("file")}
-          />
-
-          <button className="bg-green-200 p-2 rounded" type="submit">
-            Submit
-          </button>
-        </form>
-      )}
-      {error && <ErrorMessage message={error} />} */}
       </div>
     </div>
   );

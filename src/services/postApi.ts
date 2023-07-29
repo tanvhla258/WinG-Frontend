@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
-import { addPost, setPost } from '../features/post/postSlice';
+import { addPost, setComment, setPost } from '../features/post/postSlice';
 
 // Define a service using a base URL and expected endpoints
 
@@ -33,7 +33,35 @@ export const postApi = createApi({
       } catch (error) {
       }
     },
-  }),
+      }),
+    getPublicPost: builder.query({
+      query() {
+        return {
+          url: 'me',
+        };
+      },
+    async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      try {
+        const { data } = await queryFulfilled;
+        dispatch(setPost(data));
+      } catch (error) {
+      }
+    },
+      }),
+      getProfilePost: builder.query({
+        query({username} : {username:string | null}) {
+          return {
+            url: `user?username=${username}`,
+          };
+        },
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setPost(data));
+        } catch (error) {
+        }
+      },
+        }),
   createPost: builder.mutation({
     query(postData) {
       return {
@@ -47,12 +75,38 @@ export const postApi = createApi({
       const { data } = await queryFulfilled;
       dispatch(addPost(data));
     } catch (error) {
+
     }
   },
-}),
+ }),
+  createComment: builder.mutation({
+      query(comment) {
+        return {
+          url: '/comment',
+          method: 'POST',
+          body: comment,
+        };
+      },
+  }),
+  getComments: builder.query({
+    query(postId) {
+      return {
+        url: `/comment?post_id=${postId}`,
+        method: 'GET',
+      };
+    },  
+    async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      try {
+        const { data } = await queryFulfilled;
+        dispatch(setComment(data));
+      } catch (error) {
+      }
+    },
+}
+),           
 })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useCreatePostMutation, useGetOnwPostsQuery } = postApi
+export const { useGetProfilePostQuery,useGetPublicPostQuery,useGetCommentsQuery,useCreatePostMutation, useGetOnwPostsQuery,useCreateCommentMutation } = postApi

@@ -11,6 +11,16 @@ export interface IUser {
     privacy: string,
     caption: string,
     image: string,
-    create_at: Date
-    update_at: Date
+    create_at: string
+    update_at: string
   }
+export interface IComment{
+  id: string,
+  post_id: string,
+  user_id: string,
+  content: string,
+  create_at: string,
+  update_at: string,
+  avatar:string,
+  full_name:string
+}

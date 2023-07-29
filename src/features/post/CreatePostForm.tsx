@@ -27,7 +27,6 @@ function CreatePostForm() {
     formData.append("file", data.file[0]);
     formData.append("privacy", data.privacy);
     formData.append("caption", data.caption);
-
     console.log(formData);
     await addPost(formData);
   };

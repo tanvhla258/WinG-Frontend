@@ -1,9 +1,9 @@
 import React from "react";
-import { useAppSelector } from "../hooks";
+import { useAppSelector } from "../../hooks";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { URL } from "../constant/constant";
+import { URL } from "../../constant/constant";
 import Swal from "sweetalert2";
-import { useGlobalContext } from "./AppLayout";
+import { useGlobalContext } from "../../components/AppLayout";
 interface FormValues {
   file: FileList;
 }
