@@ -12,7 +12,6 @@ export const postApi = createApi({
     // Add the token to the Authorization header if available
     const token =  (getState() as RootState).auth.accessToken
    
-    console.log(token)
     // Add the token to the Authorization header if available
     if (token) {
       headers.set('Token', `Bearer ${token}`);
@@ -30,7 +29,6 @@ export const postApi = createApi({
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
       try {
         const { data } = await queryFulfilled;
-        console.log(data);
         dispatch(setPost(data));
       } catch (error) {
       }
@@ -41,17 +39,14 @@ export const postApi = createApi({
       return {
         url: '/create',
         method: 'POST',
-
         body: postData,
       };
     },
   async onQueryStarted(args, { dispatch, queryFulfilled }) {
     try {
       const { data } = await queryFulfilled;
-      console.log(data);
       dispatch(addPost(data));
     } catch (error) {
-      console.log("query wrong")
     }
   },
 }),

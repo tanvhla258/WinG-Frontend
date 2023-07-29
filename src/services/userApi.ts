@@ -13,7 +13,6 @@ export const userApi = createApi({
     // Add the token to the Authorization header if available
     const token =  (getState() as RootState).auth.accessToken
    
-    console.log(token)
     // Add the token to the Authorization header if available
     if (token) {
       headers.set('Token', `Bearer ${token}`);
@@ -32,7 +31,6 @@ export const userApi = createApi({
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
       try {
         const { data } = await queryFulfilled;
-        console.log(data)
         dispatch(setUser({avatarURL:data.avatarURL,id:data.id,fullName:data.full_name,username:data.user_name}));
       } catch (error) {}
     },

@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import Avatar from "./Avatar";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { useCreatePostMutation } from "../services/postApi";
+import Avatar from "../../components/Avatar";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useCreatePostMutation } from "../../services/postApi";
+import Swal from "sweetalert2";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../components/AppLayout";
+
 interface FormValues {
   file: FileList;
   caption: string;
   privacy: "PUBLIC" | "PRIVATE" | "FRIEND";
 }
 function CreatePostForm() {
+  const { setModalActive, setModalContent } = useGlobalContext();
+
   const { register, handleSubmit } = useForm<FormValues>();
   const token = useAppSelector((state) => state.auth.accessToken);
   const user = useAppSelector((state) => state.user.user);
   const [addPost, { isSuccess, isError, error }] = useCreatePostMutation();
-
+  const navigate = useNavigate();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = new FormData();
     console.log(data);
@@ -25,11 +31,21 @@ function CreatePostForm() {
     console.log(formData);
     await addPost(formData);
   };
+  useEffect(
+    function () {
+      if (isSuccess) {
+        Swal.fire({ title: "Post successfully" });
+        setModalActive(false);
+        navigate("/");
+      }
+    },
+    [isSuccess]
+  );
   return (
     <div className="w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-end gap-2 mb-3">
-          <Avatar src={user?.avatarURL} ring={false} size={12} />
+          <Avatar src={user?.avatarURL} ring={false} size={"h-12 w-12"} />
           <div className="flex gap-1  flex-col">
             <p className="text-lg font-semibold pl-1  ">{user?.fullName}</p>
             <select

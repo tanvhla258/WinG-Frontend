@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { URL } from "../constant/constant";
+import { URL } from "../../constant/constant";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAppDispatch } from "../hooks";
-import { setCredentials } from "../features/auth/authSlice";
+import { useAppDispatch } from "../../hooks";
+import { setCredentials } from "./authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRegisterMutation } from "../services/authApi";
+import { useRegisterMutation } from "../../services/authApi";
 import Swal from "sweetalert2";
 
 const registerSchema = z
@@ -45,7 +45,9 @@ function Signup() {
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({ icon: "success", title: "Register successfully" });
-      localStorage.setItem("token", registerData.refreshToken);
+      localStorage.setItem("accessToken", registerData.accessToken);
+      localStorage.setItem("refreshToken", registerData.refreshToken);
+
       dispatch(setCredentials(registerData));
       navigate("/");
     }
@@ -55,7 +57,7 @@ function Signup() {
       Swal.fire({
         icon: "error",
         title: "Register failed",
-        text: error?.data.message || "Unknown error",
+        text: error?.data?.message || "Unknown error",
       });
     }
   }, [isError]);

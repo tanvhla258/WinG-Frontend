@@ -26,7 +26,7 @@ function AppLayout({ children }: Props) {
     <div
       className={`${
         modalActive ? "relative w-full h-full" : ""
-      } m-auto h-screen bg-slate-200`}
+      } m-auto min-h-screen  bg-slate-200`}
     >
       <MyGlobalContext.Provider
         value={{ modalContent, setModalContent, modalActive, setModalActive }}
@@ -35,7 +35,7 @@ function AppLayout({ children }: Props) {
         {
           <div
             onClick={() => setModalActive(false)}
-            className={`abolute z-10 bg-gray-600 opacity-50 absolute inset-0 ${
+            className={`abolute z-40 bg-gray-600 opacity-50 absolute inset-0 ${
               modalActive ? "block" : "hidden"
             }`}
           ></div>

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { URL } from "../constant/constant";
+import { URL } from "../../constant/constant";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   useLoginWithEmailMutation,
   useLoginWithUsernameMutation,
-} from "../services/authApi";
+} from "../../services/authApi";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAppDispatch } from "../hooks";
-import { setCredentials } from "../features/auth/authSlice";
+import { useAppDispatch } from "../../hooks";
+import { setCredentials } from "./authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -56,9 +56,10 @@ function Login() {
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({ icon: "success", title: "Success login" });
-      localStorage.setItem("token", loginData.refreshToken);
       dispatch(setCredentials(loginData));
-      console.log("set new credentials");
+      localStorage.setItem("accessToken", loginData.accessToken);
+      localStorage.setItem("refreshToken", loginData.refreshToken);
+
       navigate("/");
     }
   }, [isSuccess]);

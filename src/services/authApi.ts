@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
+import { userApi } from './userApi';
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({ baseUrl: `${URL}/` }),
@@ -10,6 +11,12 @@ export const authApi = createApi({
           method: 'POST',
           body: loginData,
         }),
+        async onQueryStarted(args, { dispatch, queryFulfilled }) {
+          try {
+            await queryFulfilled;
+            await dispatch(userApi.endpoints.getUser.initiate(null));
+          } catch (error) {}
+        },
        
       }),
       loginWithEmail: builder.mutation({
@@ -18,8 +25,14 @@ export const authApi = createApi({
           method: 'POST',
           body: loginData,
         }),
+        async onQueryStarted(args, { dispatch, queryFulfilled }) {
+          try {
+            await queryFulfilled;
+            await dispatch(userApi.endpoints.getUser.initiate(null));
+          } catch (error) {}
+        },
       }),
-      register: builder.mutation({
+      register: builder.mutation({    
         query: (registerData) => ({
           url: 'register/basic',
           method: 'POST',

@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { URL } from "../constant/constant";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Post from "./Post";
-import CreatePost from "./CreatePost";
+import Post from "../features/post/Post";
+import CreatePost from "../features/post/CreatePost";
 import TopBar from "./TopBar";
 import { useAppSelector } from "../hooks";
 import Avatar from "./Avatar";
 import { useGlobalContext } from "./AppLayout";
 import SetAvatarForm from "./setAvatarForm";
+import { useGetOnwPostsQuery } from "../services/postApi";
+import PostList from "../features/post/PostList";
 
 function Profile() {
   const user = useAppSelector((state) => state.user.user);
+  const { data: posts } = useGetOnwPostsQuery();
   const { setModalActive, setModalContent } = useGlobalContext();
 
   return (
@@ -25,7 +28,7 @@ function Profile() {
               setModalContent(<SetAvatarForm />);
             }}
             src={user?.avatarURL}
-            size={32}
+            size={"h-32 w-32"}
             ring={true}
           />
           <div className="flex flex-col gap-2">
@@ -39,7 +42,7 @@ function Profile() {
           <div className="basis-2/3">
             <CreatePost />
             <div className="mb-3"></div>
-            <Post />
+            <PostList />
           </div>
         </div>
         {/* {isLoading ? (

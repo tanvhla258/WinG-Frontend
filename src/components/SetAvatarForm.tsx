@@ -2,11 +2,15 @@ import React from "react";
 import { useAppSelector } from "../hooks";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { URL } from "../constant/constant";
+import Swal from "sweetalert2";
+import { useGlobalContext } from "./AppLayout";
 interface FormValues {
   file: FileList;
 }
 
 function SetAvatarForm() {
+  const { setModalActive, setModalContent } = useGlobalContext();
+
   const { register, handleSubmit } = useForm<FormValues>();
   const token = useAppSelector((state) => state.auth.accessToken);
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -23,7 +27,11 @@ function SetAvatarForm() {
       // Make a request to the Profile endpoint with the username and password
 
       if (!res.ok) throw new Error("post failed");
-    } catch (error: any) {}
+      Swal.fire("Update avatar successfully");
+    } catch (error: any) {
+    } finally {
+      setModalActive(false);
+    }
   };
   return (
     <div className="w-[400px]">

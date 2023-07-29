@@ -21,7 +21,7 @@ const slice = createSlice({
       state.refreshToken = refreshToken
 
     },
-    logout: (
+    clearToken: (
       state,
     ) => {
       state.accessToken = null
@@ -30,7 +30,7 @@ const slice = createSlice({
   },
 })
 
-export const { setCredentials,logout} = slice.actions
+export const { setCredentials,clearToken} = slice.actions
 
 export default slice.reducer
 

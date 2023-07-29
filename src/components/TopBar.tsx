@@ -4,13 +4,16 @@ import { URL } from "../constant/constant";
 import { IoMdNotifications } from "react-icons/io";
 import { BiSolidMessageRoundedDots } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import Avatar from "./Avatar";
+import { logout } from "../features/user/userSlice";
+import { clearToken } from "../features/auth/authSlice";
 
 function TopBar() {
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user.user);
+  const dispatch = useAppDispatch();
   function toggleAvatar() {
     setAvatarDropDown((toggle: boolean) => !toggle);
   }
@@ -39,7 +42,7 @@ function TopBar() {
           <Avatar
             onClick={() => toggleAvatar()}
             src={user?.avatarURL}
-            size={12}
+            size={"h-12 w-12"}
           />
           {avatarDropDown || (
             <div
@@ -57,10 +60,10 @@ function TopBar() {
                 </li>
                 <li>
                   <a
-                    onClick={() => {
-                      localStorage.removeItem("userToken");
-                      localStorage.setItem("isAuthen", "false");
-
+                    onClick={async () => {
+                      dispatch(logout());
+                      dispatch(clearToken());
+                      localStorage.clear();
                       navigate("/login");
                     }}
                     className="block cursor-pointer select-none	 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"

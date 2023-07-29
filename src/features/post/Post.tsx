@@ -1,22 +1,22 @@
 import React from "react";
-import { URL } from "../constant/constant";
+import { URL } from "../../constant/constant";
 import { BiLike } from "react-icons/bi";
 import { AiOutlineComment } from "react-icons/ai";
-import Avatar from "./Avatar";
-import { useAppSelector } from "../hooks";
-import { IPost } from "../types/model";
+import Avatar from "../../components/Avatar";
+import { useAppSelector } from "../../hooks";
+import { IPost } from "../../types/model";
 function Post({ post }: { post: IPost }) {
   const user = useAppSelector((state) => state.user.user);
   return (
     <div className="bg-white rounded h-fit w-full border-gray-600 border-1">
       <img
-        className="object-cover rounded h-[220px] w-full"
+        className="object-contain rounded h-[220px] w-full"
         src={`${URL}${post?.image}`}
         alt=""
       />
       <div className="p-4">
         <div className="flex mb-3 gap-2 ">
-          <Avatar src={user?.avatarURL} size={12} />
+          <Avatar src={user?.avatarURL} size={"h-12 w-12"} />
           <div className="text-slate-500">
             <h2 className="text-sm">{user?.fullName}</h2>
             {/* <h2 className="text-sm">{post[2]?.create_at}</h2> */}

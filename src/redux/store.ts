@@ -26,7 +26,7 @@ return  configureStore({
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(userApi.middleware,authApi.middleware,postApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware,userApi.middleware,postApi.middleware),
     preloadedState 
 })
 }
