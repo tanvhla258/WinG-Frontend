@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCreateCommentMutation } from "../../services/postApi";
 import Swal from "sweetalert2";
 import { useAppSelector } from "../../hooks";
 import Avatar from "../../components/Avatar";
-import { IPost } from "../../types/model";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../components/AppLayout";
+import { IoMdSend } from "react-icons/io";
+import EmojiPicker from "emoji-picker-react";
+import { BiSmile } from "react-icons/bi";
 
 interface FormValues {
   content: string;
@@ -17,6 +19,8 @@ function CommentForm({ postId }: { postId: string }) {
   const user = useAppSelector((state) => state.user.user);
   const [addComment, { isSuccess, isError, error }] =
     useCreateCommentMutation();
+  const [emojiPopup, setemojiPopup] = useState<boolean>(false);
+
   const { setModalActive, setModalContent } = useGlobalContext();
 
   const navigate = useNavigate();
@@ -45,8 +49,14 @@ function CommentForm({ postId }: { postId: string }) {
             className="placeholder:text-slate-400 w-full bg-slate-200 rounded-md p-2 font-sm focus:outline-0 focus:placeholder:opacity-50 "
             {...register("content")}
           ></input>
+          <BiSmile
+            onClick={() => {
+              setemojiPopup((prev: boolean) => !prev);
+            }}
+          />
+          {emojiPopup ? <EmojiPicker /> : <></>}
           <button className=" bg-green-200 p-2 rounded" type="submit">
-            Send
+            <IoMdSend fill="green" />
           </button>
         </div>
       </form>
@@ -55,6 +65,3 @@ function CommentForm({ postId }: { postId: string }) {
 }
 
 export default CommentForm;
-function setModalActive(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}

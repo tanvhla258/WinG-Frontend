@@ -1,14 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
-import { setUser } from '../features/user/userSlice';
-import { useDispatch, useSelector } from 'react-redux'; // Add this import for accessing the Redux state
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
 
 // Define a service using a base URL and expected endpoints
 
-export const userApi = createApi({
-  reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/user/`, 
+export const relationshipApi = createApi({
+  reducerPath: 'relationshipApi',
+  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/relationship/`, 
   prepareHeaders: (headers,{ getState}) => {
     // Add the token to the Authorization header if available
     const token =  (getState() as RootState).auth.accessToken
@@ -21,26 +19,20 @@ export const userApi = createApi({
   },
  }),
   endpoints: (builder) => ({
-    getUser: builder.query({
-      query() {
-        return {
-          url: 'me',
-        };
-      },
-   
-    async onQueryStarted(args, { dispatch, queryFulfilled }) {
-      try {
-        const { data } = await queryFulfilled;
-        dispatch(setUser({avatarURL:data.avatarURL,id:data.id,fullName:data.full_name,username:data.user_name}));
-      } catch (error) {}
-    },
     
-    
-  }),
   getRelationship: builder.query({
-    query() {
+    query(id) {
       return {
-        url: 'me',
+        url: `?user_id=${id}`,
+      };
+    },
+  }),
+  addFriend: builder.query({
+    query({id,status}) {
+      return {
+        url: `?user_id=${id}&status=${status}`,
+        method:'POST'
+
       };
     },
   })
@@ -49,4 +41,4 @@ export const userApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserQuery } = userApi
+export const { useGetRelationshipQuery,useAddFriendQuery } = relationshipApi

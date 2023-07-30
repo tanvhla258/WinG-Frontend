@@ -9,12 +9,16 @@ import postSlice from '../features/post/postSlice'
 import { combineReducers } from '@reduxjs/toolkit'
 import type { PreloadedState } from '@reduxjs/toolkit'
 import { publicApi } from '../services/publicApi'
+import { relationshipApi } from '../services/relationshipApi'
+
 
 const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
   [publicApi.reducerPath]: publicApi.reducer,
+  [relationshipApi.reducerPath]: relationshipApi.reducer,
+
 
 
   auth: authSlice, // Add your authSlice reducer here
@@ -29,7 +33,7 @@ return  configureStore({
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware,userApi.middleware,postApi.middleware,publicApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware,relationshipApi.middleware,userApi.middleware,postApi.middleware,publicApi.middleware),
     preloadedState 
 })
 }

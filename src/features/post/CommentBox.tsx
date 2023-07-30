@@ -17,7 +17,7 @@ function CommentBox({ post, user }: ICommentBox) {
   useEffect(() => {
     // Trigger the API call whenever the token changes
     refetch();
-  });
+  }, []);
   if (isLoading) return <Loader />;
   return (
     <div>

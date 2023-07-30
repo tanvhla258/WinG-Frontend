@@ -25,9 +25,9 @@ function Profile() {
   const { data: postData, isLoading: postLoaidng } = useGetProfilePostQuery({
     username,
   });
+  console.log(user);
   const { setModalActive, setModalContent } = useGlobalContext();
   if (isLoading && postLoaidng) return <Loader />;
-  console.log(postData);
   return (
     <div>
       <div className="max-w-screen-lg mt-5 m-auto">
@@ -50,7 +50,7 @@ function Profile() {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <AddFriendButton />
+            <AddFriendButton targetUserId={user?.id} />
           </div>
         </div>
         <div className="flex gap-4 justify-between">

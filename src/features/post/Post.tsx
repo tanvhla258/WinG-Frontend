@@ -10,9 +10,7 @@ import CommentBox from "./CommentBox";
 import { convertStringTime } from "../../helper/convert";
 function Post({ post }: { post: IPost }) {
   const user = useAppSelector((state) => state.user.user);
-  const { modalActive, modalContent, setModalActive, setModalContent } =
-    useGlobalContext();
-
+  const { setModalActive, setModalContent } = useGlobalContext();
   return (
     <div className="bg-white p-2 rounded h-fit w-full border-gray-600 border-1">
       <div className="flex ml-2 items-start mb-3 gap-2 ">

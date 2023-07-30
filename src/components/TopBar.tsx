@@ -13,16 +13,22 @@ import Loader from "./Loader";
 
 function TopBar() {
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
+  const { isLoading, refetch } = useGetUserQuery();
+  const token = useAppSelector((state) => state.auth.accessToken);
+
+  useEffect(
+    function () {
+      refetch();
+    },
+    [token]
+  );
   const navigate = useNavigate();
-  const { data: userData, refetch, isLoading } = useGetUserQuery();
   const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
   function toggleAvatar() {
     setAvatarDropDown((toggle: boolean) => !toggle);
   }
-  useEffect(function () {
-    refetch();
-  }, []);
+
   if (isLoading) return <Loader />;
   return (
     <div className="bg-white w-full z-30 py-2 sticky top-0">
@@ -48,7 +54,7 @@ function TopBar() {
 
           <Avatar
             onClick={() => toggleAvatar()}
-            src={userData?.avatarURL}
+            src={user?.avatarURL}
             size={"h-12 w-12"}
           />
           {avatarDropDown || (

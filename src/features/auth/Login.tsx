@@ -74,8 +74,8 @@ function Login() {
   }, [isError]);
 
   const onSubmit: SubmitHandler<LoginSchema> = async (formData) => {
-    const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
-    const phoneRegex = new RegExp("^([0-9]){10,16}$");
+    // const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+    // const phoneRegex = new RegExp("^([0-9]){10,16}$");
 
     const { email, password } = formData;
     if (email && password) {

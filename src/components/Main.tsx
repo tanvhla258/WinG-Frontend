@@ -7,8 +7,8 @@ import PostList from "../features/post/PostList";
 import { useAppSelector } from "../hooks";
 
 function Main() {
-  const { refetch } = useGetUserQuery();
-
+  const { data, refetch, isSuccess } = useGetUserQuery();
+  if (isSuccess) localStorage.setItem("user", JSON.stringify(data));
   const { data: postData, refetch: postReftch } = useGetPublicPostQuery();
   // console.log(postData, data);
   const posts = useAppSelector((state) => state.post.posts);
