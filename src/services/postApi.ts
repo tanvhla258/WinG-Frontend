@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
-import { addPost, setComment, setPost } from '../features/post/postSlice';
+import { addPost, deletePost, setComment, setPost } from '../features/post/postSlice';
 
-// Define a service using a base URL and expected endpoints
+// Define a service using a base URL and /expected endpoints
 
 export const postApi = createApi({
   reducerPath: 'postApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/post/`, 
+  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/post`, 
   prepareHeaders: (headers,{ getState}) => {
     // Add the token to the Authorization header if available
     const token =  (getState() as RootState).auth.accessToken
@@ -23,7 +23,7 @@ export const postApi = createApi({
     getOnwPosts: builder.query({
       query() {
         return {
-          url: 'me',
+          url: '/me',
         };
       },
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -37,7 +37,7 @@ export const postApi = createApi({
     getPublicPost: builder.query({
       query() {
         return {
-          url: 'me',
+          url: '/new_feed',
         };
       },
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -49,9 +49,17 @@ export const postApi = createApi({
     },
       }),
       getProfilePost: builder.query({
-        query({username} : {username:string | null}) {
+        query({username,id} : {username:string | null,id:string | null}) {
+          if (!username && id)
+              return {
+                url: `/user?user_id=${id}`,
+              };
+          if (username && !id)
+              return {
+                url: `/user?username=${username}`,
+              };
           return {
-            url: `user?username=${username}`,
+            url: `/user?username=${username}&user_id=${id}`,
           };
         },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -103,10 +111,28 @@ export const postApi = createApi({
       }
     },
 }
-),           
+
+),     
+deletePost: builder.mutation({
+  query(postId) {
+    return {
+      url: `?post_id=${postId}`,
+      method: 'DELETE',
+    };
+  },  
+  async onQueryStarted(args, { dispatch, queryFulfilled }) {
+    try {
+      const { data } = await queryFulfilled;
+      dispatch(deletePost(data));
+    } catch (error) {
+    }
+  },
+}
+
+),          
 })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetProfilePostQuery,useGetPublicPostQuery,useGetCommentsQuery,useCreatePostMutation, useGetOnwPostsQuery,useCreateCommentMutation } = postApi
+export const { useDeletePostMutation,useGetProfilePostQuery,useGetPublicPostQuery,useGetCommentsQuery,useCreatePostMutation, useGetOnwPostsQuery,useCreateCommentMutation } = postApi

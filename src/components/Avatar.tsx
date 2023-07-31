@@ -12,7 +12,7 @@ function Avatar({
   ring?: boolean;
   onClick?: () => void;
 }) {
-  const className = `inline-block object-cover cursor-pointer ${size} rounded-full ${
+  const className = `inline-block object-cover cursor-pointer ${size} rounded-full active:scale-95 ${
     ring ? "ring-2 ring-white" : ""
   }`;
   // const avatarClass = classNames({`inline-block object-cover cursor-pointer h-${size} w-${size} rounded-full ${

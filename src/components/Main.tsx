@@ -5,7 +5,6 @@ import { useGetUserQuery } from "../services/userApi";
 import { useGetPublicPostQuery } from "../services/postApi";
 import PostList from "../features/post/PostList";
 import { useAppSelector } from "../hooks";
-
 function Main() {
   const { data, refetch, isSuccess } = useGetUserQuery();
   if (isSuccess) localStorage.setItem("user", JSON.stringify(data));
@@ -20,13 +19,14 @@ function Main() {
   }, [token]);
   return (
     <div className="m-auto ">
-      <div className="max-w-screen-lg flex gap-4 py-4  flex-row m-auto">
-        <div className="basis-1/4 sticky top-10 z-20">
+      <div className="max-w-screen-xl flex gap-4 py-4  flex-row m-auto">
+        <div className="hidden md:block md:basis-1/3 sticky top-10 z-20">
           <Sidebar />
         </div>
-        <div className="basis-3/4">
+        <div className="basis:full md:basis-2/3">
           <CreatePost />
           <div className="mb-3"></div>
+
           <PostList posts={posts} />
         </div>
       </div>

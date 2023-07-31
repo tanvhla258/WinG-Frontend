@@ -19,7 +19,8 @@ function CreatePost() {
         <Avatar src={user?.avatarURL} size={"h-8 w-8"} ring={false} />
         <input
           placeholder="Create a post..."
-          className="placeholder:text-blue font-medium focus:outline-0 focus:placeholder:opacity-50 "
+          disabled
+          className="placeholder:text-blue cursor-pointer font-medium focus:outline-0 focus:placeholder:opacity-50 "
         />
       </div>
       <div>

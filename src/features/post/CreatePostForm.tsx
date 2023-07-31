@@ -23,7 +23,6 @@ function CreatePostForm() {
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = new FormData();
-    console.log(data);
     formData.append("file", data.file[0]);
     formData.append("privacy", data.privacy);
     formData.append("caption", data.caption);
@@ -37,8 +36,20 @@ function CreatePostForm() {
         setModalActive(false);
         navigate("/");
       }
+      if (isError) {
+        console.log(error);
+
+        Swal.fire({
+          title: "Post failed",
+          icon: "error",
+          text: error?.data.error || "",
+        });
+        setModalActive(false);
+        navigate("/");
+      }
     },
-    [isSuccess]
+
+    [isSuccess, isError]
   );
   return (
     <div className="w-[400px]">

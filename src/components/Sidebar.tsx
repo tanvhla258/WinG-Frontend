@@ -1,40 +1,69 @@
 import React from "react";
 import { IconType } from "react-icons";
 import { AiFillHome } from "react-icons/ai";
+import Avatar from "./Avatar";
+import { useAppSelector } from "../hooks";
+import { FaGamepad, FaLayerGroup, FaUserFriends } from "react-icons/fa";
+import { BsFillBookmarkFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { SiRiotgames } from "react-icons/si";
 interface sideProps {
   link: string;
   text: string;
   icon: JSX.Element;
   active: boolean;
+  onClick?: () => void; // Add onClick prop
 }
-const navlink = [
-  {
-    link: "/",
-    text: "Home",
-    icon: <AiFillHome className="fill-blue" />,
-    active: true,
-  },
-  {
-    link: "/",
-    text: "Saved",
-    icon: <AiFillHome className="fill-blue" />,
-    active: false,
-  },
-  {
-    link: "/",
-    text: "Friends",
-    icon: <AiFillHome className="fill-blue" />,
-    active: false,
-  },
-];
+
 function Sidebar() {
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user.user);
+  const navlink = [
+    {
+      link: `/profile?username=${user?.username}`,
+      text: user?.fullName || "",
+      icon: <Avatar src={user?.avatarURL} size={"h-10 w-10"} ring={false} />,
+      active: false,
+      onClick: () => {
+        navigate(`/profile?username=${user?.username}`);
+      },
+    },
+    {
+      link: "/",
+      text: "Friends",
+      icon: <FaUserFriends size={30} className="fill-blue" />,
+      active: false,
+    },
+    {
+      link: "/",
+      text: "Saved",
+      icon: <BsFillBookmarkFill size={30} className="fill-blue" />,
+      active: false,
+    },
+  ];
+
+  const shortcuts = [
+    {
+      link: "/",
+      text: "Valorant",
+      icon: <SiRiotgames size={30} className="fill-red" />,
+      active: false,
+    },
+    {
+      link: "/",
+      text: "Group",
+      icon: <FaLayerGroup size={30} className="fill-yellow" />,
+      active: false,
+    },
+  ];
   return (
-    <>
-      <div className=" flex flex-col gap-1 ">
+    <div className="hidden md:block">
+      <div className=" flex-col gap-1 ">
         {navlink.map((nav: sideProps) => (
           <span
+            onClick={nav.onClick}
             key={nav.text}
-            className={`flex items-center transition gap-2 py-2 pl-2 ${
+            className={`flex items-center transition gap-4 py-2 pl-2 ${
               nav.active ? "bg-white shadow-md" : "hover:bg-slate-200"
             }  rounded hover:cursor-pointer hover:shadow-md `}
           >
@@ -42,8 +71,18 @@ function Sidebar() {
           </span>
         ))}
       </div>
-      <div>Discover</div>
-    </>
+      <div className="bg-slate-300 h-[1px] my-3"></div>
+      {shortcuts.map((nav: sideProps) => (
+        <span
+          key={nav.text}
+          className={`flex items-center transition gap-4 py-2 pl-2 ${
+            nav.active ? "bg-white shadow-md" : "hover:bg-slate-200"
+          }  rounded hover:cursor-pointer hover:shadow-md `}
+        >
+          {nav.icon} {nav.text}
+        </span>
+      ))}
+    </div>
   );
 }
 

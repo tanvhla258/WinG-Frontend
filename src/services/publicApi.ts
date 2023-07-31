@@ -12,9 +12,17 @@ export const publicApi = createApi({
  }),
   endpoints: (builder) => ({
     getUserProfile: builder.query({
-      query(profieData:{username:string | null,id:string}) {
+      query({username,id} : {username:string | null,id:string | null}) {
+        if (!username && id)
+            return {
+              url: `user?id=${id}`,
+            };
+        if (username && !id)
+            return {
+              url: `user?username=${username}`,
+            };
         return {
-          url: `user?username=${profieData?.username}`,
+          url: `user?username=${username}&id=${id}`,
         };
       },
   }),

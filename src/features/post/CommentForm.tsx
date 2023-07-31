@@ -15,7 +15,7 @@ interface FormValues {
 }
 
 function CommentForm({ postId }: { postId: string }) {
-  const { register, handleSubmit } = useForm<FormValues>();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
   const user = useAppSelector((state) => state.user.user);
   const [addComment, { isSuccess, isError, error }] =
     useCreateCommentMutation();
@@ -25,12 +25,18 @@ function CommentForm({ postId }: { postId: string }) {
 
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    reset();
     await addComment({ content: data.content, post_id: postId });
   };
   useEffect(
     function () {
       if (isSuccess) {
         Swal.fire({ title: "Comment successfully" });
+        setModalActive(false);
+        navigate("/");
+      }
+      if (isError) {
+        Swal.fire({ title: "Comment failed", icon: "error" });
         setModalActive(false);
         navigate("/");
       }

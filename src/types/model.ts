@@ -11,8 +11,12 @@ export interface IUser {
     privacy: string,
     caption: string,
     image: string,
-    create_at: string
-    update_at: string
+    create_at: string,
+    update_at: string,
+    initiator_full_name:string
+    initiator_avatar:string
+    owner_full_name: string,
+    owner_avatar:string
   }
 export interface IComment{
   id: string,

@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { URL } from "../../constant/constant";
 import Swal from "sweetalert2";
 import { useGlobalContext } from "../../components/AppLayout";
+import Avatar from "../../components/Avatar";
 interface FormValues {
   file: FileList;
 }
@@ -13,6 +14,8 @@ function SetAvatarForm() {
 
   const { register, handleSubmit } = useForm<FormValues>();
   const token = useAppSelector((state) => state.auth.accessToken);
+  const user = useAppSelector((state) => state.user.user);
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = new FormData();
     formData.append("file", data.file[0]);
@@ -34,7 +37,11 @@ function SetAvatarForm() {
     }
   };
   return (
-    <div className="w-[400px]">
+    <div className="w-[360px] h-[400px]">
+      <div className="text-center mb-6">
+        <Avatar src={user?.avatarURL} size={"h-64 w-64"}></Avatar>
+      </div>
+      <h2 className="text-lg font-semibold ml-4">Update Avatar</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           className="file:mr-4 file:py-2 file:px-4
@@ -46,10 +53,17 @@ function SetAvatarForm() {
           id="avatar"
           {...register("file")}
         />
-
-        <button className="bg-green-200 p-2 rounded" type="submit">
-          Submit
-        </button>
+        <div className="absolute right-8 flex gap-3 bottom-8">
+          <button
+            onClick={() => setModalActive(false)}
+            className="bg-slate-200  p-2 rounded"
+          >
+            Cancel
+          </button>
+          <button className="bg-blue text-white p-2 rounded" type="submit">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );

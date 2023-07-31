@@ -6,7 +6,7 @@ import type { RootState } from '../redux/store'; // Import the RootState type if
 
 export const relationshipApi = createApi({
   reducerPath: 'relationshipApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/relationship/`, 
+  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/relationship`, 
   prepareHeaders: (headers,{ getState}) => {
     // Add the token to the Authorization header if available
     const token =  (getState() as RootState).auth.accessToken
@@ -27,18 +27,50 @@ export const relationshipApi = createApi({
       };
     },
   }),
-  addFriend: builder.query({
-    query({id,status}) {
+  getListFriend: builder.query({
+    query() {
       return {
-        url: `?user_id=${id}&status=${status}`,
+        url: `/list_friend`,
+      };
+    },
+  }),
+  addFriend: builder.mutation({
+    query(id) {
+      return {
+        url: `/request?user_id=${id}`,
         method:'POST'
-
+      };
+    },
+  }),
+  acceptInvite: builder.mutation({
+    query(id) {
+      return {
+        url: `/accept?user_id=${id}`,
+        method:'POST'
+      };
+    },
+  }),
+  unfriend: builder.mutation({
+    query(id) {
+      return {
+        url: `/unfriend?user_id=${id}`,
+        method:'DELETE'
+      };
+    },
+  }),
+  cancelRequest: builder.mutation({
+    query(id) {
+      return {
+        url: `/cancel_request?user_id=${id}`,
+        method:'DELETE'
       };
     },
   })
+  
+  
 })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetRelationshipQuery,useAddFriendQuery } = relationshipApi
+export const { useCancelRequestMutation,useUnfriendMutation,useAcceptInviteMutation,useGetRelationshipQuery,useAddFriendMutation,useGetListFriendQuery } = relationshipApi
