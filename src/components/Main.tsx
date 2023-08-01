@@ -17,6 +17,7 @@ function Main() {
     refetch();
     postReftch();
   }, [token]);
+  console.log(postData);
   return (
     <div className="m-auto ">
       <div className="max-w-screen-xl flex gap-4 py-4  flex-row m-auto">

@@ -17,10 +17,15 @@ import { useGetUserQuery } from "../services/userApi";
 import Loader from "./Loader";
 import { AiOutlineSearch } from "react-icons/ai";
 import { BsChatDots, BsChatDotsFill } from "react-icons/bs";
+import { FaUserFriends } from "react-icons/fa";
+import TopBarDropdown from "./TopBarDropdown";
+import ListPending from "./ListPending";
 
 function TopBar() {
   const token = useAppSelector((state) => state.auth.accessToken);
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
+  const [friendDropDown, setfriendDropDown] = useState<boolean>(false);
+
   const { isLoading, refetch } = useGetUserQuery();
   useEffect(
     function () {
@@ -33,6 +38,11 @@ function TopBar() {
   const dispatch = useAppDispatch();
   function toggleAvatar() {
     setAvatarDropDown((toggle: boolean) => !toggle);
+    setfriendDropDown(false);
+  }
+  function toggleListPeding() {
+    setAvatarDropDown(false);
+    setfriendDropDown((toggle: boolean) => !toggle);
   }
   if (!token) return <></>;
 
@@ -84,6 +94,12 @@ function TopBar() {
           <button className="rounded-full hover:bg-slate-400 bg-slate-300 p-2">
             <IoMdNotifications size={30} />
           </button>
+          <button
+            onClick={() => toggleListPeding()}
+            className="rounded-full hover:bg-slate-400 bg-slate-300 p-2"
+          >
+            <FaUserFriends size={30} />
+          </button>
 
           <img
             onClick={() => toggleAvatar()}
@@ -91,11 +107,8 @@ function TopBar() {
             src={`${URL}${user?.avatarURL}`}
             alt="avatar"
           />
-          {avatarDropDown || (
-            <div
-              id="dropdown"
-              className="z-100 top-12 right-0 border-2 border-slate-200 absolute text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-            >
+          {avatarDropDown && (
+            <TopBarDropdown size="w-44">
               <ul className="py-2">
                 <li>
                   <a
@@ -121,7 +134,12 @@ function TopBar() {
                   </a>
                 </li>
               </ul>
-            </div>
+            </TopBarDropdown>
+          )}
+          {friendDropDown && (
+            <TopBarDropdown size="w-80">
+              <ListPending />
+            </TopBarDropdown>
           )}
         </div>
       </div>

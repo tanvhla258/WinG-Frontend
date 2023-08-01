@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
-import { addPost, deletePost, setComment, setPost } from '../features/post/postSlice';
+import { addComment, addPost, deleteComment, deletePost, setComment, setPost, updateComment, updatePost } from '../features/post/postSlice';
 
 // Define a service using a base URL and /expected endpoints
 
@@ -73,9 +73,10 @@ export const postApi = createApi({
   createPost: builder.mutation({
     query(postData) {
       return {
-        url: '/create',
+        url: `/create`,
         method: 'POST',
-        body: postData,
+      body: postData,
+
       };
     },
   async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -87,6 +88,40 @@ export const postApi = createApi({
     }
   },
  }),
+ updatePost: builder.mutation({
+  query(postData) {
+    return {
+      url: ``,
+      method: 'PUT',
+      body: postData,
+    };
+  },
+async onQueryStarted(args, { dispatch, queryFulfilled }) {
+  try {
+    const { data } = await queryFulfilled;
+    dispatch(updatePost(data));
+  } catch (error) {
+
+  }
+},
+}),
+deletePost: builder.mutation({
+  query(postId) {
+    return {
+      url: `?post_id=${postId}`,
+      method: 'DELETE',
+    };
+  },  
+  async onQueryStarted(args, { dispatch, queryFulfilled }) {
+    try {
+      const { data } = await queryFulfilled;
+      dispatch(deletePost(data));
+    } catch (error) {
+    }
+  },
+}
+
+),  
   createComment: builder.mutation({
       query(comment) {
         return {
@@ -94,6 +129,13 @@ export const postApi = createApi({
           method: 'POST',
           body: comment,
         };
+      },
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(addComment(data));
+        } catch (error) {
+        }
       },
   }),
   getComments: builder.query({
@@ -111,28 +153,41 @@ export const postApi = createApi({
       }
     },
 }
-
-),     
-deletePost: builder.mutation({
-  query(postId) {
+),            
+  updateComent: builder.mutation({
+  query({commentId,content}:{commentId:string,content:string}) {
     return {
-      url: `?post_id=${postId}`,
+      url: `/comment?comment_id=${commentId}&content=${content}`,
+      method: 'PUT',
+    };
+  },  
+  async onQueryStarted(args, { dispatch, queryFulfilled }) {
+    try {
+      const { data } = await queryFulfilled;
+      dispatch(updateComment(data));
+    } catch (error) {
+    }
+  },
+}
+), 
+  deleteComment: builder.mutation({
+  query(commentId) {
+    return {
+      url: `/comment?comment_id=${commentId}`,
       method: 'DELETE',
     };
   },  
   async onQueryStarted(args, { dispatch, queryFulfilled }) {
     try {
       const { data } = await queryFulfilled;
-      dispatch(deletePost(data));
+      dispatch(deleteComment(data));
     } catch (error) {
     }
   },
 }
-
-),          
+), 
 })
 })
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useDeletePostMutation,useGetProfilePostQuery,useGetPublicPostQuery,useGetCommentsQuery,useCreatePostMutation, useGetOnwPostsQuery,useCreateCommentMutation } = postApi
+
+export const { useUpdateComentMutation,useDeleteCommentMutation,useUpdatePostMutation,useDeletePostMutation,useGetProfilePostQuery,useGetPublicPostQuery,useGetCommentsQuery,useCreatePostMutation, useGetOnwPostsQuery,useCreateCommentMutation } = postApi

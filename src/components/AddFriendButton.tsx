@@ -12,7 +12,13 @@ import { TbUserCancel } from "react-icons/tb";
 import { FaUserFriends } from "react-icons/fa";
 import { useAppSelector } from "../hooks";
 
-function AddFriendButton({ targetUserId }: { targetUserId: string }) {
+function AddFriendButton({
+  targetUserId,
+  textSize = "text-md",
+}: {
+  targetUserId: string;
+  textSize?: string;
+}) {
   const currentUser = useAppSelector((state) => state.user.user);
   const {
     data,
@@ -29,7 +35,9 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
   if (currentUser?.id == targetUserId) return;
   if (getRelationshipLoading)
     return (
-      <button className="text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded">
+      <button
+        className={`text-white  flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
+      >
         <Loader />
       </button>
     );
@@ -40,7 +48,7 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
           await addFriend(targetUserId);
           refetch();
         }}
-        className="text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded"
+        className={`text-white flex  items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
       >
         <AiOutlineUserAdd />
         Add friend
@@ -56,7 +64,7 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
             await cancelRequest(targetUserId);
             refetch();
           }}
-          className="text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded"
+          className={`text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
         >
           <TbUserCancel />
           Cancel Request
@@ -71,7 +79,7 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
               await accept(targetUserId);
               refetch();
             }}
-            className="text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded"
+            className={`text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
           >
             <AiOutlineUserAdd />
             Accept Request
@@ -83,10 +91,10 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
               await cancelRequest(targetUserId);
               refetch();
             }}
-            className="text-black flex items-center gap-2 relative bg-slate-200 hover: p-2 rounded"
+            className={`text-black justify-between  flex items-center gap-2 relative bg-slate-200 hover: p-2 rounded ${textSize}`}
           >
             <TbUserCancel />
-            Cancel Request
+            Cancel
             <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
           </button>
         </div>
@@ -97,7 +105,7 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
       <div className="flex gap-2">
         <button
           disabled
-          className="text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded"
+          className={`text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
         >
           <FaUserFriends />
           Friend
@@ -108,7 +116,7 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
             await unfriend(targetUserId);
             refetch();
           }}
-          className="text-black flex items-center gap-2 relative bg-slate-200 hover: p-2 rounded"
+          className={`text-black flex items-center gap-2 relative bg-slate-200 hover: p-2 rounded ${textSize}`}
         >
           <TbUserCancel />
           Unfriend
@@ -119,7 +127,9 @@ function AddFriendButton({ targetUserId }: { targetUserId: string }) {
   }
   if (getRelationshipLoading || isLoading)
     return (
-      <button className="text-white relative bg-blue hover: p-2 rounded">
+      <button
+        className={`text-white relative bg-blue hover: p-2 rounded ${textSize}`}
+      >
         <Loader />
       </button>
     );

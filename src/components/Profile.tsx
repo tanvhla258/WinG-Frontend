@@ -14,18 +14,23 @@ import Loader from "./Loader";
 import AddFriendButton from "./AddFriendButton";
 import { useGetProfilePostQuery } from "../services/postApi";
 import { AiFillSchedule } from "react-icons/ai";
-import { useGetListFriendQuery } from "../services/relationshipApi";
+import {
+  useAcceptInviteMutation,
+  useGetListFriendQuery,
+} from "../services/relationshipApi";
+import { useAppSelector } from "../hooks";
 
 function Profile() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const currentUser = useAppSelector((state) => state.user.user);
   const username = searchParams.get("username");
   const id = searchParams.get("id");
   const {
     data: listFriend,
     isLoading: listFriendLoading,
     refetch,
-  } = useGetListFriendQuery();
+  } = useGetListFriendQuery(currentUser === id ? null : id);
   const { data: user, isLoading } = useGetUserProfileQuery({
     username: username,
     id,

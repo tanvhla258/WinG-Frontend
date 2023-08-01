@@ -16,7 +16,6 @@ interface ICommentBox {
 function CommentBox({ post, user }: ICommentBox) {
   const { data: comments, isLoading, refetch } = useGetCommentsQuery(post.id);
   useEffect(() => {
-    // Trigger the API call whenever the token changes
     refetch();
   }, []);
 
@@ -24,7 +23,7 @@ function CommentBox({ post, user }: ICommentBox) {
   return (
     <div>
       <div className="text-2xl text-center text-bold mb-3">
-        {user?.fullName} post
+        {post?.owner_full_name}'s post
       </div>
       <Post showCommentInput={false} post={post} />
       <div className="overflow-y-scroll no-scrollbar max-h-20">

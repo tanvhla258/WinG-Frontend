@@ -28,12 +28,30 @@ export const relationshipApi = createApi({
     },
   }),
   getListFriend: builder.query({
-    query() {
+    query(userId: string | null) {
+      if (!userId)
       return {
         url: `/list_friend`,
       };
+      else return {
+        url: `/list_friend?user_id=${userId}`,
+
+      }
     },
   }),
+  getListReceived: builder.query({
+    query() {
+      return {
+        url: `/list_received_request`,
+      };
+  }}),
+  getListSend: builder.query({
+    query() {
+      return {
+        url: `/list_sent_request`,
+      };
+  }}),
+
   addFriend: builder.mutation({
     query(id) {
       return {
@@ -64,8 +82,7 @@ export const relationshipApi = createApi({
         url: `/cancel_request?user_id=${id}`,
         method:'DELETE'
       };
-    },
-  })
+    },})
   
   
 })
@@ -73,4 +90,4 @@ export const relationshipApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useCancelRequestMutation,useUnfriendMutation,useAcceptInviteMutation,useGetRelationshipQuery,useAddFriendMutation,useGetListFriendQuery } = relationshipApi
+export const { useGetListSendQuery,useGetListReceivedQuery,useCancelRequestMutation,useUnfriendMutation,useAcceptInviteMutation,useGetRelationshipQuery,useAddFriendMutation,useGetListFriendQuery } = relationshipApi

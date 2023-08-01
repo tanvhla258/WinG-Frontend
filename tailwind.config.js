@@ -8,6 +8,11 @@ export default {
         red: "#DD2828",
         yellow: "#F5B205",
       },
+      zIndex: {
+        90: "90",
+
+        100: "100",
+      },
     },
   },
   plugins: [],
