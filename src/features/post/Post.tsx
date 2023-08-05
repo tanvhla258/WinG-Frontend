@@ -7,7 +7,11 @@ import { useAppSelector } from "../../hooks";
 import { IPost } from "../../types/model";
 import { useGlobalContext } from "../../components/AppLayout";
 import CommentBox from "./CommentBox";
-import { convertStringTime, getMediaType } from "../../helper/convert";
+import {
+  convertStringTime,
+  getMediaType,
+  getTimeDifferenceFromNow,
+} from "../../helper/convert";
 import PrivacyIcon from "../../components/PrivacyIcon";
 import CommentForm from "./CommentForm";
 import { useNavigate } from "react-router-dom";
@@ -52,7 +56,7 @@ function Post({
             {post.owner_full_name}
           </h2>
           <h2 className="text-xs flex items-center gap-1">
-            {convertStringTime(post?.create_at)}{" "}
+            {getTimeDifferenceFromNow(post?.create_at)}{" "}
             <PrivacyIcon iconType={post?.privacy?.toLowerCase() || "public"} />
           </h2>
         </div>
@@ -63,7 +67,7 @@ function Post({
 
       {type === "image" ? (
         <img
-          className="object-cover rounded h-[200px] w-full"
+          className="object-cover rounded h-[400px] w-full"
           src={`${URL}${post?.image}`}
           alt=""
         />

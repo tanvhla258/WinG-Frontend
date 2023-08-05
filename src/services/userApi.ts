@@ -37,16 +37,74 @@ export const userApi = createApi({
     
     
   }),
+  editUser: builder.mutation({
+    query({user,avatar}) {
+      return {
+        url: `me?user_name=${user.username}&full_name=${user.fullName}`,
+        method:'PUT',
+        body:avatar
+      };
+    },
+ 
+  async onQueryStarted(args, { dispatch, queryFulfilled }) {
+    try {
+      const { data } = await queryFulfilled;
+      dispatch(setUser({avatarURL:data.avatarURL,id:data.id,fullName:data.full_name,username:data.user_name}));
+    } catch (error) {}
+  },
+  
+  
+}),
   getRelationship: builder.query({
     query() {
       return {
         url: 'me',
       };
     },
+  }),
+  editPassword: builder.mutation({
+    query(password) {
+      return {
+        url: `edit_password?password=${password}`,
+      };
+    },
+    async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      try {
+        const { data } = await queryFulfilled;
+      } catch (error) {}
+    },
+  }),
+  verifyCodePassword: builder.mutation({
+    query(code) {
+      return {
+        url: `edit_password?code=${code}`,
+        method:'PUT'
+      };
+    },
+    async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      try {
+        const { data } = await queryFulfilled;
+      } catch (error) {}
+    },
+  }),
+  editEmail: builder.mutation({
+    query({password,email}) {
+      return {
+        url: `edit_email?password=${password}&email=${email}`,
+        method:'PUT'
+      };
+    },
+    async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      try {
+        const { data } = await queryFulfilled;
+      } catch (error) {}
+    },
   })
+
+  
 })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserQuery } = userApi
+export const {useEditEmailMutation,useVerifyCodePasswordMutation,useEditPasswordMutation,useEditUserMutation,useGetUserQuery } = userApi

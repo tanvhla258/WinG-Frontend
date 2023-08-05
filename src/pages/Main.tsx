@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "../components/Sidebar";
 import CreatePost from "../features/post/CreatePost";
 import { useGetUserQuery } from "../services/userApi";
 import { useGetPublicPostQuery } from "../services/postApi";
@@ -17,7 +17,6 @@ function Main() {
     refetch();
     postReftch();
   }, [token]);
-  console.log(postData);
   return (
     <div className="m-auto ">
       <div className="max-w-screen-xl flex gap-4 py-4  flex-row m-auto">

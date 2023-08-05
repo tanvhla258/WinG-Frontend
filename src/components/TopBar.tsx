@@ -19,12 +19,15 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BsChatDots, BsChatDotsFill } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import TopBarDropdown from "./TopBarDropdown";
-import ListPending from "./ListPending";
+import ListPending from "../features/notification/ListPending";
+import { useGlobalContext } from "./AppLayout";
+import ChangePasswordForm from "../features/user/ChangePasswordForm";
 
 function TopBar() {
   const token = useAppSelector((state) => state.auth.accessToken);
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
   const [friendDropDown, setfriendDropDown] = useState<boolean>(false);
+  const { modalActive, setModalActive, setModalContent } = useGlobalContext();
 
   const { isLoading, refetch } = useGetUserQuery();
   useEffect(
@@ -32,6 +35,12 @@ function TopBar() {
       refetch();
     },
     [token]
+  );
+  useEffect(
+    function () {
+      setAvatarDropDown(false);
+    },
+    [window.location.href, modalActive]
   );
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user.user);
@@ -64,11 +73,24 @@ function TopBar() {
             {/* <h1 className=" text-2xl text-blue font-bold">WinG</h1> */}
           </div>
           <div className="relative block">
-            <input
-              className="rounded-full block bg-slate-200 outline-none p-2 pl-10"
-              type="text"
-              placeholder="Search WinG"
-            />
+            <form
+              action=""
+              onSubmit={(e) => {
+                e.preventDefault();
+                const username = e.target.username.value;
+                const url = `http://localhost:5173/profile?username=${username}`;
+                window.location.href = url;
+              }}
+            >
+              <input
+                className="rounded-full block bg-slate-200 outline-none p-2 pl-10"
+                type="text"
+                placeholder="Search WinG"
+                id="profile"
+                name="username"
+              />
+              <button type="submit" className="absolute"></button>
+            </form>
             <span className="absolute  inset-y-0 left-0 flex items-center pl-2">
               <button className="p-1 focus:outline-none focus:shadow-outline">
                 <AiOutlineSearch />
@@ -118,6 +140,17 @@ function TopBar() {
                     className="block cursor-pointer select-none	 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Profile
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={async () => {
+                      setModalActive(true);
+                      setModalContent(<ChangePasswordForm />);
+                    }}
+                    className="block cursor-pointer select-none	 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >
+                    Change Password
                   </a>
                 </li>
                 <li>

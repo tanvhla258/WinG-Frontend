@@ -28,3 +28,13 @@ export interface IComment{
   avatar:string,
   full_name:string
 }
+ 
+export interface IPending{
+  avatar: string,
+create_at: string,
+ id:  string,
+status: string,
+user_full_name:  string,
+user_id:  string,
+user_name:  string
+}

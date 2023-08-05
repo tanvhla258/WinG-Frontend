@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
+import { setPendings } from '../features/notification/notificationSlice';
 
 // Define a service using a base URL and expected endpoints
 
@@ -26,6 +27,7 @@ export const relationshipApi = createApi({
         url: `?user_id=${id}`,
       };
     },
+    
   }),
   getListFriend: builder.query({
     query(userId: string | null) {
@@ -39,12 +41,22 @@ export const relationshipApi = createApi({
       }
     },
   }),
-  getListReceived: builder.query({
+  getListReceived: builder.mutation({
     query() {
       return {
         url: `/list_received_request`,
       };
-  }}),
+  },
+  async onQueryStarted(args, { dispatch, queryFulfilled }) {
+    try {
+      const { data } = await queryFulfilled;
+      dispatch(setPendings(data));
+    } catch (error) {}
+  },
+
+
+
+}),
   getListSend: builder.query({
     query() {
       return {
@@ -90,4 +102,4 @@ export const relationshipApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetListSendQuery,useGetListReceivedQuery,useCancelRequestMutation,useUnfriendMutation,useAcceptInviteMutation,useGetRelationshipQuery,useAddFriendMutation,useGetListFriendQuery } = relationshipApi
+export const { useGetListSendQuery,useGetListReceivedMutation,useCancelRequestMutation,useUnfriendMutation,useAcceptInviteMutation,useGetRelationshipQuery,useAddFriendMutation,useGetListFriendQuery } = relationshipApi

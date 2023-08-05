@@ -10,6 +10,8 @@ import { combineReducers } from '@reduxjs/toolkit'
 import type { PreloadedState } from '@reduxjs/toolkit'
 import { publicApi } from '../services/publicApi'
 import { relationshipApi } from '../services/relationshipApi'
+import notificationSlice from '../features/notification/notificationSlice'
+import { apiSlice } from '../services/api'
 
 
 const rootReducer = combineReducers({
@@ -18,12 +20,14 @@ const rootReducer = combineReducers({
   [postApi.reducerPath]: postApi.reducer,
   [publicApi.reducerPath]: publicApi.reducer,
   [relationshipApi.reducerPath]: relationshipApi.reducer,
-
+  [apiSlice.reducerPath]: apiSlice.reducer,
 
 
   auth: authSlice, // Add your authSlice reducer here
   user: userSlice, // Add your userSlice reducer here
   post: postSlice, // Add your userSlice reducer here
+  notification: notificationSlice, // Add your userSlice reducer here
+
 
 })
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

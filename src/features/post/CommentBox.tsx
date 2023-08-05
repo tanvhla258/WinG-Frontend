@@ -28,7 +28,7 @@ function CommentBox({ post, user }: ICommentBox) {
       <Post showCommentInput={false} post={post} />
       <div className="overflow-y-scroll no-scrollbar max-h-20">
         {comments?.map((comment: IComment) => (
-          <Comment comment={comment} />
+          <Comment postOwner={post.owner_id} comment={comment} />
         ))}
       </div>
       <CommentForm postId={post.id} />

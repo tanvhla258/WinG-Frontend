@@ -1,15 +1,21 @@
-import React from "react";
-import { useAppSelector } from "../hooks";
-import { useGetListReceivedQuery } from "../services/relationshipApi";
-import Loader from "./Loader";
-import { URL } from "../constant/constant";
-import Avatar from "./Avatar";
-import { convertStringTime, getTimeDifferenceFromNow } from "../helper/convert";
-import AddFriendButton from "./AddFriendButton";
+import React, { useEffect } from "react";
+import { useAppSelector } from "../../hooks";
+import { useGetListReceivedMutation } from "../../services/relationshipApi";
+import Loader from "../../components/Loader";
+import { URL } from "../../constant/constant";
+import Avatar from "../../components/Avatar";
+import {
+  convertStringTime,
+  getTimeDifferenceFromNow,
+} from "../../helper/convert";
+import AddFriendButton from "../../components/AddFriendButton";
 
 function ListPending() {
   const user = useAppSelector((state) => state.user.user);
-  const { data, isLoading } = useGetListReceivedQuery();
+  const [getList, { data, isLoading }] = useGetListReceivedMutation();
+  useEffect(function () {
+    getList();
+  }, []);
   if (isLoading) return <Loader></Loader>;
   console.log(data);
   if (!data || data.length === 0)

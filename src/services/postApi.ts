@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
 import { addComment, addPost, deleteComment, deletePost, setComment, setPost, updateComment, updatePost } from '../features/post/postSlice';
-
 // Define a service using a base URL and /expected endpoints
 
 export const postApi = createApi({

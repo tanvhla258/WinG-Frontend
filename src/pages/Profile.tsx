@@ -4,22 +4,26 @@ import { URL } from "../constant/constant";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Post from "../features/post/Post";
 import CreatePost from "../features/post/CreatePost";
-import TopBar from "./TopBar";
-import Avatar from "./Avatar";
-import { useGlobalContext } from "./AppLayout";
+import TopBar from "../components/TopBar";
+import Avatar from "../components/Avatar";
+import { useGlobalContext } from "../components/AppLayout";
 import SetAvatarForm from "../features/user/SetAvatarForm";
 import PostList from "../features/post/PostList";
 import { useGetUserProfileQuery } from "../services/publicApi";
-import Loader from "./Loader";
-import AddFriendButton from "./AddFriendButton";
+import Loader from "../components/Loader";
+import AddFriendButton from "../components/AddFriendButton";
 import { useGetProfilePostQuery } from "../services/postApi";
-import { AiFillSchedule } from "react-icons/ai";
+import { AiFillSchedule, AiOutlineMail } from "react-icons/ai";
 import {
   useAcceptInviteMutation,
   useGetListFriendQuery,
 } from "../services/relationshipApi";
 import { useAppSelector } from "../hooks";
-
+import { FiEdit2 } from "react-icons/fi";
+import EditProfileForm from "../features/user/EditProfileForm";
+import ChangePasswordForm from "../features/user/VerifyCodeForm";
+import TopBarDropdown from "../components/TopBarDropdown";
+import ChangeEmailForm from "../features/user/ChangeEmailForm";
 function Profile() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -30,7 +34,8 @@ function Profile() {
     data: listFriend,
     isLoading: listFriendLoading,
     refetch,
-  } = useGetListFriendQuery(currentUser === id ? null : id);
+  } = useGetListFriendQuery(currentUser?.id === id ? null : id);
+
   const { data: user, isLoading } = useGetUserProfileQuery({
     username: username,
     id,
@@ -82,8 +87,32 @@ function Profile() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex  gap-2">
             <AddFriendButton targetUserId={user?.id} />
+            {(currentUser?.id === id || currentUser?.username === username) && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setModalActive(true);
+                    setModalContent(<EditProfileForm />);
+                  }}
+                  className="`trasition duration-100  ease-in text-black  flex items-center gap-2 relative bg-slate-300 hover:bg-slate-400 p-2 rounded `"
+                >
+                  <FiEdit2 />
+                  Edit profile
+                </button>
+                <button
+                  onClick={() => {
+                    setModalActive(true);
+                    setModalContent(<ChangeEmailForm />);
+                  }}
+                  className="`trasition duration-100  ease-in text-black  flex items-center gap-2 relative bg-slate-300 hover:bg-slate-400 p-2 rounded `"
+                >
+                  <AiOutlineMail />
+                  Edit email
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex gap-4  justify-between">
@@ -112,6 +141,7 @@ function Profile() {
                 {listFriend?.map((friend: any) => {
                   return (
                     <div
+                      className="w-28  relative  rounded"
                       onClick={() => navigate(`/profile?id=${friend?.user_id}`)}
                     >
                       <div
@@ -121,12 +151,12 @@ function Profile() {
                         <img
                           src={`${URL}${friend.avatar}`}
                           alt=""
-                          className="object-cover hover:bg-slate-100 cursor-pointer rounded w-full h-full"
+                          className="object-cover duration-100 transition cursor-pointer rounded w-full h-full"
                         />
-                        <div className="absolute hover:bg-slate-600 cursor-pointer hover:opacity-10 inset-0"></div>
+                        <div className="absolute duration-100 transition hover:bg-slate-600 cursor-pointer hover:opacity-10 inset-0"></div>
                       </div>
 
-                      <h2 className="font-semibold mt-1 cursor-pointer hover:underline text-sm overflow-clip">
+                      <h2 className="font-semibold mt-1 cursor-pointer w-full hover:underline text-sm overflow-clip">
                         {friend.user_full_name}
                       </h2>
                     </div>

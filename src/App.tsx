@@ -1,10 +1,10 @@
 import "./App.css";
 import Login from "./features/auth/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Main from "./components/Main";
+import Main from "./pages/Main";
 import Signup from "./features/auth/SignUp";
 import AppLayout from "./components/AppLayout";
-import Profile from "./components/Profile";
+import Profile from "./pages/Profile";
 import CatchLogin from "./components/CatchLogin";
 import RequireUser from "./components/RequireUser";
 function App() {
