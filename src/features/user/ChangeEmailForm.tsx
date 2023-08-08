@@ -27,7 +27,6 @@ function ChangeEmailForm() {
   };
   useEffect(
     function () {
-      console.log(error);
       if (isSuccess) {
         Swal.fire({ title: "Change Email successfully" });
         setModalActive(false);

@@ -55,7 +55,7 @@ function Profile() {
   return (
     <div>
       <div className="max-w-screen-lg mt-5 m-auto">
-        <div className="bg-white rounded mb-8  p-6 flex justify-between items-end">
+        <div className="bg-white shadow-md rounded mb-8  p-6 flex justify-between items-end">
           <div className="flex gap-3 items-end">
             <Avatar
               onClick={() => {
@@ -69,10 +69,10 @@ function Profile() {
 
             <div className="flex flex-col gap-2">
               <p className="font-bold text-4xl">{user?.full_name}</p>
-              <p className="text-slate-500 hover:underline cursor-pointer">
+              <p className="text-slate-500 hidden sm:flex hover:underline cursor-pointer">
                 {listFriend?.length} friends
               </p>
-              <div className="mt-3 flex -space-x-1 overflow-hidden">
+              <div className="mt-3 hidden sm:flex  -space-x-1 overflow-hidden">
                 {listFriend?.map((friend: any) => {
                   return (
                     <img
@@ -115,9 +115,9 @@ function Profile() {
             )}
           </div>
         </div>
-        <div className="flex gap-4  justify-between">
+        <div className="flex gap-4  flex-col md:flex-row   justify-between">
           <div className="basis-2/5 flex-col flex gap-4">
-            <div className=" bg-white  h-fit rounded p-3">
+            <div className=" bg-white shadow h-fit rounded p-3">
               <h2 className="mb-6 font-semibold text-xl">Intro</h2>
               <div className="flex flex-col gap-3">
                 <h2 className="flex items-start  flex-start gap-3">
@@ -135,7 +135,7 @@ function Profile() {
                 </h2>
               </div>
             </div>
-            <div className=" bg-white min-h-[300px]  h-fit rounded p-3">
+            <div className=" bg-white shadow min-h-[300px]  h-fit rounded p-3">
               <h2 className="mb-6 font-semibold text-xl">Friend</h2>
               <div className="flex gap-3 flex-wrap">
                 {listFriend?.map((friend: any) => {

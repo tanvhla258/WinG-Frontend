@@ -58,7 +58,7 @@ function TopBar() {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="bg-white w-full z-30  sticky top-0">
+    <div className="bg-white w-full z-30 shadow-lg  sticky top-0">
       <div className=" flex justify-between items-end max-w-screen-xl m-auto">
         <div className="cursor-pointer my-2 gap-3 flex items-center">
           <div
@@ -83,7 +83,7 @@ function TopBar() {
               }}
             >
               <input
-                className="rounded-full block bg-slate-200 outline-none p-2 pl-10"
+                className="rounded-full w-8 sm:w-full block bg-slate-200 outline-none p-2 pl-10"
                 type="text"
                 placeholder="Search WinG"
                 id="profile"

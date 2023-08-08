@@ -11,6 +11,7 @@ import {
 import EditCommentForm from "./EdiCommentForm";
 import { userApi } from "../../services/userApi";
 import { useAppSelector } from "../../hooks";
+import { getTimeDifferenceFromNow } from "../../helper/convert";
 function Comment({
   comment,
   postOwner,
@@ -37,7 +38,7 @@ function Comment({
   useEffect(function () {}, [updateSuccess, deleteSuccess]);
 
   return !openEditForm ? (
-    <div className="flex mb-3 relative gap-2">
+    <div className="flex mb-6 relative  gap-2">
       <Avatar
         onClick={() => goToProfile()}
         src={comment?.avatar}
@@ -52,6 +53,9 @@ function Comment({
         </h2>
         <h2 className="text-sm text-black">{comment?.content}</h2>
       </div>
+      <span className="text-slate-400 text-xs absolute -bottom-4 left-12">
+        {getTimeDifferenceFromNow(comment.create_at)}
+      </span>
       {(postOwner === user?.id || user?.id === comment.user_id) && (
         <div className="self-center relative">
           <BsThreeDots
@@ -71,7 +75,7 @@ function Comment({
                       <a
                         onClick={() => {
                           setOpenEditForm(true);
-                          // setOpenSelect((prev) => !prev);
+                          setOpenSelect((prev) => !prev);
                           // setModalActive(true);
                           // setModalContent(<EditPostForm post={post} />);
                         }}

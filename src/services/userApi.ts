@@ -55,13 +55,7 @@ export const userApi = createApi({
   
   
 }),
-  getRelationship: builder.query({
-    query() {
-      return {
-        url: 'me',
-      };
-    },
-  }),
+
   editPassword: builder.mutation({
     query(password) {
       return {

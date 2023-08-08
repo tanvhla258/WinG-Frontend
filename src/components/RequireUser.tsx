@@ -7,30 +7,25 @@ const RequireUser = () => {
   const accessToken = localStorage.getItem("refreshToken");
   const refreshToken = localStorage.getItem("refreshToken");
 
-  const location = useLocation();
   const dispatch = useAppDispatch();
-  const { isLoading, isFetching } = userApi.endpoints.getUser.useQuery(null, {
-    skip: false,
-    refetchOnMountOrArgChange: true,
-  });
+  // const { isLoading, isFetching } = userApi.endpoints.getUser.useQuery(null, {
+  //   skip: false,
+  //   refetchOnMountOrArgChange: true,
+  // });
 
-  const loading = isLoading || isFetching;
+  // const loading = isLoading || isFetching;
 
-  const user = userApi.endpoints.getUser.useQueryState(null, {
-    selectFromResult: ({ data }) => data!,
-  });
+  // const user = userApi.endpoints.getUser.useQueryState(null, {
+  //   selectFromResult: ({ data }) => data!,
+  // });
 
-  if (loading) {
-    return <Loader />;
-  }
+  // if (loading) {
+  //   return <Loader />;
+  // }
   if (accessToken) {
     dispatch(setCredentials({ accessToken, refreshToken }));
   }
-  return accessToken ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+  return accessToken ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default RequireUser;

@@ -5,10 +5,13 @@ import { IPending } from '../../types/model'
   
   // Define the initial state using that type
   interface IPendingState {
-    pendings: Array<IPending>
+    pendingReceived: Array<IPending>
+    pendingSend: Array<IPending>
+
   }
   const initialState: IPendingState = {
-    pendings: []
+    pendingReceived: [],
+    pendingSend:[]
   }
 
   export const notificationSlice = createSlice({
@@ -16,13 +19,16 @@ import { IPending } from '../../types/model'
     initialState,
     reducers: {
    
-      setPendings: (state, action: PayloadAction<Array<IPending>>) => {
-        state.pendings = action.payload;
+      setPendingReceived: (state, action: PayloadAction<Array<IPending>>) => {
+        state.pendingReceived = action.payload
+      },
+      setPendingSend: (state, action: PayloadAction<Array<IPending>>) => {
+        state.pendingSend = action.payload
       },
     },
   })
   
-  export const { setPendings } = notificationSlice.actions
+  export const { setPendingReceived,setPendingSend } = notificationSlice.actions
   
   // Other code such as selectors can use the imported `RootState` type
   

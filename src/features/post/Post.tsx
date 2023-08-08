@@ -21,10 +21,9 @@ import {
   useDeletePostMutation,
   useGetCommentsQuery,
 } from "../../services/postApi";
-import CreatePostForm from "./CreatePostForm";
 import EditPostForm from "./EditPostForm";
 import Swal from "sweetalert2";
-
+import Comment from "./Comment";
 function Post({
   post,
   showCommentInput = true,
@@ -40,7 +39,7 @@ function Post({
   const [deletePost, { isLoading }] = useDeletePostMutation();
   const [openSelect, setOpenSelect] = useState(false);
   return (
-    <div className="bg-white p-2 relative rounded h-fit w-full border-gray-600 border-1">
+    <div className="bg-white shadow p-2 relative rounded h-fit w-full border-gray-600 border-1">
       <div className="flex ml-2 items-start mb-3 gap-2 ">
         <Avatar
           onClick={() => navigate(`/profile?id=${post?.owner_id}`)}
@@ -112,7 +111,11 @@ function Post({
           </button>
         </div>
       </div>
+      {showCommentInput && comments?.length > 0 && (
+        <Comment comment={comments?.[0]} postOwner={post.owner_id} />
+      )}
       {showCommentInput && <CommentForm postId={post.id} />}
+
       <div className="absolute flex right-3 top-3">
         <div>
           <BsThreeDots

@@ -38,6 +38,7 @@ function EditCommentForm({
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     reset();
     await updateComment({ content: data.content, commentId: comment.id });
+    setOpenEdit(false);
   };
   useEffect(
     function () {
@@ -71,11 +72,7 @@ function EditCommentForm({
           <button className=" bg-green-200 p-2 rounded" type="submit">
             <IoMdSend fill="green" />
           </button>
-          <button
-            onClick={() => setOpenEdit(false)}
-            className="  p-2 rounded"
-            type="submit"
-          >
+          <button onClick={() => setOpenEdit(false)} className="  p-2 rounded">
             <MdClear />
           </button>
         </div>
