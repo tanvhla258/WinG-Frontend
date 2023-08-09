@@ -59,7 +59,6 @@ function Login() {
       dispatch(setCredentials(loginData));
       localStorage.setItem("accessToken", loginData.accessToken);
       localStorage.setItem("refreshToken", loginData.refreshToken);
-
       navigate("/");
     }
   }, [isSuccess]);
@@ -68,7 +67,7 @@ function Login() {
       Swal.fire({
         icon: "error",
         title: "Login failed",
-        text: error?.data.message || "Unknown error",
+        text: error?.data?.message || "Unknown error",
       });
     }
   }, [isError]);

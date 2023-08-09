@@ -3,13 +3,25 @@ import { setCredentials} from "../features/auth/authSlice"
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
 import { URL } from '../constant/constant';
 import { logout } from '../features/user/userSlice';
+import { clearToken } from '../features/auth/authSlice';
 const baseQuery = fetchBaseQuery({
     baseUrl: URL,
-    credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const token = (getState() as RootState).auth.accessToken
+        const token =  (getState() as RootState).auth.accessToken
+        
         if (token) {
-            headers.set("authorization", `Bearer ${token}`)
+            headers.set("Token", `Bearer ${token}`)
+        }
+        return headers
+    }
+})
+const baseQueryRefresh = fetchBaseQuery({
+    baseUrl: URL,
+    prepareHeaders: (headers, { getState }) => {
+        const token =  (getState() as RootState).auth.refreshToken
+        
+        if (token) {
+            headers.set("Token", `Bearer ${token}`)
         }
         return headers
     }
@@ -17,20 +29,25 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-
-    if (result?.error?.originalStatus === 401) {
+    console.log(result)
+    if (result?.error?.status === 'FETCH_ERROR') {
         console.log('sending refresh token')
         // send refresh token to get new access token 
-        const refreshResult = await baseQuery('/refresh', api, extraOptions)
-        console.log(refreshResult)
+        const refreshResult = await baseQueryRefresh('/auth/token/refresh', api, extraOptions)
         if (refreshResult?.data) { 
-            // const token = api.getState().auth.
+            const token = api.getState().auth
             // store the new token 
-            // api.dispatch(setCredentials({ }))
+            api.dispatch(setCredentials({...token,accessToken:refreshResult.data.detail}))
+            localStorage.setItem("accessToken",refreshResult.data.detail)
             // retry the original query with new access token 
             result = await baseQuery(args, api, extraOptions)
         } else {
+            console.log("token timeout")
             api.dispatch(logout())
+            api.dispatch(clearToken());
+            localStorage.clear();
+            window.location.href="./login"
+            return
         }
     }
 

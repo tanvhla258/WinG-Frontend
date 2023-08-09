@@ -2,27 +2,28 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
 import { addComment, addPost, deleteComment, deletePost, setComment, setPost, updateComment, updatePost } from '../features/post/postSlice';
+import { apiSlice } from './api';
 // Define a service using a base URL and /expected endpoints
 
-export const postApi = createApi({
-  reducerPath: 'postApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/post`, 
-  prepareHeaders: (headers,{ getState}) => {
-    // Add the token to the Authorization header if available
-    const token =  (getState() as RootState).auth.accessToken
+export const postApi = apiSlice.injectEndpoints({
+  // reducerPath: 'postApi',
+  // baseQuery: fetchBaseQuery({ baseUrl: `${URL}/post`, 
+//   prepareHeaders: (headers,{ getState}) => {
+//     // Add the token to the Authorization header if available
+//     const token =  (getState() as RootState).auth.accessToken
    
-    // Add the token to the Authorization header if available
-    if (token) {
-      headers.set('Token', `Bearer ${token}`);
-    }
-    return headers;
-  },
- }),
+//     // Add the token to the Authorization header if available
+//     if (token) {
+//       headers.set('Token', `Bearer ${token}`);
+//     }
+//     return headers;
+//   },
+//  }),
   endpoints: (builder) => ({
     getOnwPosts: builder.query({
       query() {
         return {
-          url: '/me',
+          url: '/post/me',
         };
       },
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -36,7 +37,7 @@ export const postApi = createApi({
     getPublicPost: builder.query({
       query() {
         return {
-          url: '/new_feed',
+          url: '/post/new_feed',
         };
       },
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -51,14 +52,14 @@ export const postApi = createApi({
         query({username,id} : {username:string | null,id:string | null}) {
           if (!username && id)
               return {
-                url: `/user?user_id=${id}`,
+                url: `/post/user?user_id=${id}`,
               };
           if (username && !id)
               return {
-                url: `/user?username=${username}`,
+                url: `/post/user?username=${username}`,
               };
           return {
-            url: `/user?username=${username}&user_id=${id}`,
+            url: `/post/user?username=${username}&user_id=${id}`,
           };
         },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -72,7 +73,7 @@ export const postApi = createApi({
   createPost: builder.mutation({
     query(postData) {
       return {
-        url: `/create`,
+        url: `/post/create`,
         method: 'POST',
       body: postData,
 
@@ -90,7 +91,7 @@ export const postApi = createApi({
  updatePost: builder.mutation({
   query(postData) {
     return {
-      url: ``,
+      url: `/post`,
       method: 'PUT',
       body: postData,
     };
@@ -107,7 +108,7 @@ async onQueryStarted(args, { dispatch, queryFulfilled }) {
 deletePost: builder.mutation({
   query(postId) {
     return {
-      url: `?post_id=${postId}`,
+      url: `/post?post_id=${postId}`,
       method: 'DELETE',
     };
   },  
@@ -124,7 +125,7 @@ deletePost: builder.mutation({
   createComment: builder.mutation({
       query(comment) {
         return {
-          url: '/comment',
+          url: '/post/comment',
           method: 'POST',
           body: comment,
         };
@@ -140,7 +141,7 @@ deletePost: builder.mutation({
   getComments: builder.query({
     query(postId) {
       return {
-        url: `/comment?post_id=${postId}`,
+        url: `/post/comment?post_id=${postId}`,
         method: 'GET',
       };
     },  
@@ -156,7 +157,7 @@ deletePost: builder.mutation({
   updateComent: builder.mutation({
   query({commentId,content}:{commentId:string,content:string}) {
     return {
-      url: `/comment?comment_id=${commentId}&content=${content}`,
+      url: `/post/comment?comment_id=${commentId}&content=${content}`,
       method: 'PUT',
     };
   },  
@@ -172,7 +173,7 @@ deletePost: builder.mutation({
   deleteComment: builder.mutation({
   query(commentId) {
     return {
-      url: `/comment?comment_id=${commentId}`,
+      url: `/post/comment?comment_id=${commentId}`,
       method: 'DELETE',
     };
   },  

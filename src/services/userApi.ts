@@ -3,28 +3,29 @@ import { URL } from '../constant/constant'
 import { setUser } from '../features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux'; // Add this import for accessing the Redux state
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
+import { apiSlice } from './api';
 
 // Define a service using a base URL and expected endpoints
 
-export const userApi = createApi({
-  reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/user/`, 
-  prepareHeaders: (headers,{ getState}) => {
-    // Add the token to the Authorization header if available
-    const token =  (getState() as RootState).auth.accessToken
+export const userApi = apiSlice.injectEndpoints({
+//   reducerPath: 'userApi',
+//   baseQuery: fetchBaseQuery({ baseUrl: `${URL}/user/`, 
+//   prepareHeaders: (headers,{ getState}) => {
+//     // Add the token to the Authorization header if available
+//     const token =  (getState() as RootState).auth.accessToken
    
-    // Add the token to the Authorization header if available
-    if (token) {
-      headers.set('Token', `Bearer ${token}`);
-    }
-    return headers;
-  },
- }),
+//     // Add the token to the Authorization header if available
+//     if (token) {
+//       headers.set('Token', `Bearer ${token}`);
+//     }
+//     return headers;
+//   },
+//  }),
   endpoints: (builder) => ({
     getUser: builder.query({
       query() {
         return {
-          url: 'me',
+          url: '/user/me',
         };
       },
    
@@ -40,7 +41,7 @@ export const userApi = createApi({
   editUser: builder.mutation({
     query({user,avatar}) {
       return {
-        url: `me?user_name=${user.username}&full_name=${user.fullName}`,
+        url: `/user/me?user_name=${user.username}&full_name=${user.fullName}`,
         method:'PUT',
         body:avatar
       };
@@ -59,7 +60,7 @@ export const userApi = createApi({
   editPassword: builder.mutation({
     query(password) {
       return {
-        url: `edit_password?password=${password}`,
+        url: `/user/edit_password?password=${password}`,
       };
     },
     async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -71,7 +72,7 @@ export const userApi = createApi({
   verifyCodePassword: builder.mutation({
     query(code) {
       return {
-        url: `edit_password?code=${code}`,
+        url: `/user/edit_password?code=${code}`,
         method:'PUT'
       };
     },
@@ -84,7 +85,7 @@ export const userApi = createApi({
   editEmail: builder.mutation({
     query({password,email}) {
       return {
-        url: `edit_email?password=${password}&email=${email}`,
+        url: `/user/edit_email?password=${password}&email=${email}`,
         method:'PUT'
       };
     },

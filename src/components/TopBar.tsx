@@ -29,13 +29,13 @@ function TopBar() {
   const [friendDropDown, setfriendDropDown] = useState<boolean>(false);
   const { modalActive, setModalActive, setModalContent } = useGlobalContext();
 
-  const { isLoading, refetch } = useGetUserQuery();
-  useEffect(
-    function () {
-      refetch();
-    },
-    [token]
-  );
+  // const { isLoading, refetch } = useGetUserQuery();
+  // useEffect(
+  //   function () {
+  //     refetch();
+  //   },
+  //   [token]
+  // );
   useEffect(
     function () {
       setAvatarDropDown(false);
@@ -55,7 +55,7 @@ function TopBar() {
   }
   if (!token) return <></>;
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
 
   return (
     <div className="bg-white w-full z-30 shadow-lg  sticky top-0">

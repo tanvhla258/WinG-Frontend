@@ -1,30 +1,31 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { URL } from '../constant/constant'
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
-import { setPendingReceived, setPendingSend, setPendings } from '../features/notification/notificationSlice';
+import { setPendingReceived, setPendingSend } from '../features/notification/notificationSlice';
+import { apiSlice } from './api';
 
 // Define a service using a base URL and expected endpoints
 
-export const relationshipApi = createApi({
-  reducerPath: 'relationshipApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${URL}/relationship`, 
-  prepareHeaders: (headers,{ getState}) => {
-    // Add the token to the Authorization header if available
-    const token =  (getState() as RootState).auth.accessToken
+export const relationshipApi = apiSlice.injectEndpoints({
+//   reducerPath: 'relationshipApi',
+//   baseQuery: fetchBaseQuery({ baseUrl: `${URL}/relationship`, 
+//   prepareHeaders: (headers,{ getState}) => {
+//     // Add the token to the Authorization header if available
+//     const token =  (getState() as RootState).auth.accessToken
    
-    // Add the token to the Authorization header if available
-    if (token) {
-      headers.set('Token', `Bearer ${token}`);
-    }
-    return headers;
-  },
- }),
+//     // Add the token to the Authorization header if available
+//     if (token) {
+//       headers.set('Token', `Bearer ${token}`);
+//     }
+//     return headers;
+//   },
+//  }),
   endpoints: (builder) => ({
     
   getRelationship: builder.query({
     query(id) {
       return {
-        url: `?user_id=${id}`,
+        url: `/relationship?user_id=${id}`,
       };
     },
     
@@ -33,10 +34,10 @@ export const relationshipApi = createApi({
     query(userId: string | null) {
       if (!userId)
       return {
-        url: `/list_friend`,
+        url: `/relationship/list_friend`,
       };
       else return {
-        url: `/list_friend?user_id=${userId}`,
+        url: `/relationship/list_friend?user_id=${userId}`,
 
       }
     },
@@ -44,7 +45,7 @@ export const relationshipApi = createApi({
   getListReceived: builder.mutation({
     query() {
       return {
-        url: `/list_received_request`,
+        url: `/relationship/list_received_request`,
       };
   },
   async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -60,7 +61,7 @@ export const relationshipApi = createApi({
   getListSend: builder.mutation({
     query() {
       return {
-        url: `/list_sent_request`,
+        url: `/relationship/list_sent_request`,
       };
   },
   async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -75,7 +76,7 @@ export const relationshipApi = createApi({
   addFriend: builder.mutation({
     query(id) {
       return {
-        url: `/request?user_id=${id}`,
+        url: `/relationship/request?user_id=${id}`,
         method:'POST'
       };
     },
@@ -83,7 +84,7 @@ export const relationshipApi = createApi({
   acceptInvite: builder.mutation({
     query(id) {
       return {
-        url: `/accept?user_id=${id}`,
+        url: `/relationship/accept?user_id=${id}`,
         method:'POST'
       };
     },
@@ -91,7 +92,7 @@ export const relationshipApi = createApi({
   unfriend: builder.mutation({
     query(id) {
       return {
-        url: `/unfriend?user_id=${id}`,
+        url: `/relationship/unfriend?user_id=${id}`,
         method:'DELETE'
       };
     },
@@ -99,7 +100,7 @@ export const relationshipApi = createApi({
   cancelRequest: builder.mutation({
     query(id) {
       return {
-        url: `/cancel_request?user_id=${id}`,
+        url: `/relationship/cancel_request?user_id=${id}`,
         method:'DELETE'
       };
     },})
