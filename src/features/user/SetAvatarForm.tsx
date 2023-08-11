@@ -4,7 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { URL } from "../../constant/constant";
 import Swal from "sweetalert2";
 import { useGlobalContext } from "../../components/AppLayout";
-import Avatar from "../../components/Avatar";
+import Avatar from "./Avatar";
+import Button from "../../components/Button";
 interface FormValues {
   file: FileList;
 }
@@ -54,15 +55,10 @@ function SetAvatarForm() {
           {...register("file")}
         />
         <div className="absolute right-8 flex gap-3 bottom-8">
-          <button
-            onClick={() => setModalActive(false)}
-            className="bg-slate-200  p-2 rounded"
-          >
+          <Button onClick={() => setModalActive(false)} variant="secondary">
             Cancel
-          </button>
-          <button className="bg-blue text-white p-2 rounded" type="submit">
-            Save
-          </button>
+          </Button>
+          <Button>Save</Button>
         </div>
       </form>
     </div>

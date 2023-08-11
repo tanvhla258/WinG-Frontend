@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useUpdatePostMutation } from "../../services/postApi";
 import Swal from "sweetalert2";
@@ -10,6 +10,7 @@ import { useGlobalContext } from "../../components/AppLayout";
 import { IPost } from "../../types/model";
 import { getMediaType } from "../../helper/convert";
 import { URL } from "../../constant/constant";
+import Button from "../../components/Button";
 interface FormValues {
   file: FileList;
   caption: string;
@@ -21,7 +22,8 @@ function EditPostForm({ post }: { post: IPost }) {
   const { register, handleSubmit } = useForm<FormValues>();
   const token = useAppSelector((state) => state.auth.accessToken);
   const user = useAppSelector((state) => state.user.user);
-  const [updatePost, { isSuccess, isError, error }] = useUpdatePostMutation();
+  const [updatePost, { isSuccess, isError, error, isLoading }] =
+    useUpdatePostMutation();
   const type = getMediaType(post?.image);
   console.log(post);
   const navigate = useNavigate();
@@ -115,12 +117,13 @@ function EditPostForm({ post }: { post: IPost }) {
             // defaultValue={post.image}
             id="avatar"
           />
-          <button
+          <Button
             type="submit"
-            className="bg-blue w-full rounded py-2 text-white"
+            option="w-full justify-center border-2"
+            icon={isLoading ? <Loader /> : <></>}
           >
             Post
-          </button>
+          </Button>
         </div>
       </form>
     </div>

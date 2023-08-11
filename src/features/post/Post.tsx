@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import { URL } from "../../constant/constant";
 import { BiLike } from "react-icons/bi";
 import { AiOutlineComment } from "react-icons/ai";
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import { useAppSelector } from "../../hooks";
 import { IPost } from "../../types/model";
 import { useGlobalContext } from "../../components/AppLayout";
 import CommentBox from "./CommentBox";
-import {
-  convertStringTime,
-  getMediaType,
-  getTimeDifferenceFromNow,
-} from "../../helper/convert";
-import PrivacyIcon from "../../components/PrivacyIcon";
+import { getMediaType, getTimeDifferenceFromNow } from "../../helper/convert";
+import PrivacyIcon from "./PrivacyIcon";
 import CommentForm from "./CommentForm";
 import { useNavigate } from "react-router-dom";
 import { MdClear } from "react-icons/md";
@@ -24,6 +20,7 @@ import {
 import EditPostForm from "./EditPostForm";
 import Swal from "sweetalert2";
 import Comment from "./Comment";
+import Button from "../../components/Button";
 function Post({
   post,
   showCommentInput = true,
@@ -36,7 +33,7 @@ function Post({
   const { setModalActive, setModalContent } = useGlobalContext();
   const { data: comments } = useGetCommentsQuery(post?.id);
   const type = getMediaType(post?.image);
-  const [deletePost, { isLoading }] = useDeletePostMutation();
+  const [deletePost] = useDeletePostMutation();
   const [openSelect, setOpenSelect] = useState(false);
   return (
     <div className="bg-white shadow p-2 relative rounded h-fit w-full border-gray-600 border-1">
@@ -94,21 +91,19 @@ function Post({
         </div>
       </div>
       <div className="p-2">
-        <div className="flex  mb-3 pt-2 gap-2">
-          <button className="p-2 px-4 flex  items-center gap-2 text-blue rounded  bg-slate-200 hover:text-blue">
-            <BiLike className="" /> <span>Like</span>
-          </button>
+        <div className="flex mb-2 pt-2 gap-2">
+          <Button icon={<BiLike />}>Like</Button>
 
-          <button
+          <Button
             onClick={() => {
               setModalActive(true);
               setModalContent(<CommentBox user={user} post={post} />);
             }}
-            className="p-2 px-4  flex items-center gap-2 hover:text-blue"
+            variant="secondary"
+            icon={<AiOutlineComment />}
           >
-            <AiOutlineComment />
             Comment
-          </button>
+          </Button>
         </div>
       </div>
       {showCommentInput && comments?.length > 0 && (

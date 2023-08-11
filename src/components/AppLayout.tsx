@@ -5,6 +5,7 @@ type Props = {
 import { useState } from "react";
 import ModalLayout from "./ModalLayout";
 import TopBar from "./TopBar";
+import bg from "../assets/loginBG.jpeg";
 export type GlobalContent = {
   modalActive: boolean;
   setModalActive: (data: boolean) => void;
@@ -26,12 +27,31 @@ function AppLayout({ children }: Props) {
   return (
     <div
       className={`${
-        modalActive ? "relative w-full h-full" : ""
-      } m-auto min-h-screen  bg-slate-200`}
+        modalActive ? "relative   overflow-y-scroll  w-full h-full" : ""
+      } m-auto min-h-screen font-poppins  bg-slate-200`}
+      style={{
+        position: "relative",
+        backgroundColor: "rgba(0, 0, 0, 0.05)", // Fallback color in case the image doesn't load
+      }}
     >
+      <div
+        style={{
+          backgroundImage: `url(${bg})`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "contain",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          opacity: 0.1,
+          zIndex: -10,
+        }}
+      />
       <MyGlobalContext.Provider
         value={{ modalContent, setModalContent, modalActive, setModalActive }}
       >
+        {/* <img className="absolute opacity-20   " src={bg}></img> */}
         <TopBar />
         {children}
         {

@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useCreatePostMutation } from "../../services/postApi";
 import Swal from "sweetalert2";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../components/AppLayout";
+import Loader from "../../components/Loader";
+import Button from "../../components/Button";
 
 interface FormValues {
   file: FileList;
@@ -19,7 +21,8 @@ function CreatePostForm() {
   const { register, handleSubmit } = useForm<FormValues>();
   const token = useAppSelector((state) => state.auth.accessToken);
   const user = useAppSelector((state) => state.user.user);
-  const [addPost, { isSuccess, isError, error }] = useCreatePostMutation();
+  const [addPost, { isSuccess, isError, error, isLoading }] =
+    useCreatePostMutation();
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = new FormData();
@@ -88,12 +91,13 @@ function CreatePostForm() {
             id="avatar"
             // {...register("file")}
           />
-          <button
+          <Button
             type="submit"
-            className="bg-blue w-full rounded py-2 text-white"
+            option="w-full justify-center border-2"
+            icon={isLoading ? <Loader /> : <></>}
           >
             Post
-          </button>
+          </Button>
         </div>
       </form>
     </div>

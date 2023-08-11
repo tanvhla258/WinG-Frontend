@@ -6,7 +6,7 @@ import {
 } from "../../services/relationshipApi";
 import Loader from "../../components/Loader";
 import { URL } from "../../constant/constant";
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import {
   convertStringTime,
   getTimeDifferenceFromNow,

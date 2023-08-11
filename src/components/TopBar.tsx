@@ -10,7 +10,7 @@ import {
 } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import Avatar from "./Avatar";
+import Avatar from "../features/user/Avatar";
 import { logout } from "../features/user/userSlice";
 import { clearToken } from "../features/auth/authSlice";
 import { useGetUserQuery } from "../services/userApi";
@@ -22,13 +22,14 @@ import TopBarDropdown from "./TopBarDropdown";
 import ListPending from "../features/notification/ListPending";
 import { useGlobalContext } from "./AppLayout";
 import ChangePasswordForm from "../features/user/ChangePasswordForm";
+import logo from "../assets/svg/logo-no-background.svg";
 
 function TopBar() {
   const token = useAppSelector((state) => state.auth.accessToken);
+  const user = useAppSelector((state) => state.user.user);
   const [avatarDropDown, setAvatarDropDown] = useState<boolean>(false);
   const [friendDropDown, setfriendDropDown] = useState<boolean>(false);
   const { modalActive, setModalActive, setModalContent } = useGlobalContext();
-
   // const { isLoading, refetch } = useGetUserQuery();
   // useEffect(
   //   function () {
@@ -43,7 +44,7 @@ function TopBar() {
     [window.location.href, modalActive]
   );
   const navigate = useNavigate();
-  const user = useAppSelector((state) => state.user.user);
+
   const dispatch = useAppDispatch();
   function toggleAvatar() {
     setAvatarDropDown((toggle: boolean) => !toggle);
@@ -54,7 +55,6 @@ function TopBar() {
     setfriendDropDown((toggle: boolean) => !toggle);
   }
   if (!token) return <></>;
-
   // if (isLoading) return <Loader />;
 
   return (
@@ -65,11 +65,7 @@ function TopBar() {
             onClick={() => navigate("/")}
             className="flex items-center w-12  gap-3"
           >
-            <img
-              className="object-contain rounded-full"
-              src={`${URL}/public/general?file_name=WinG_logo.webp`}
-              alt="app icon"
-            />
+            <img className="object-contain rounded" src={logo} alt="app icon" />
             {/* <h1 className=" text-2xl text-blue font-bold">WinG</h1> */}
           </div>
           <div className="relative block">
@@ -137,7 +133,7 @@ function TopBar() {
                     onClick={() =>
                       navigate(`/profile?username=${user?.username}`)
                     }
-                    className="block cursor-pointer select-none	 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block hover:text-blue transition duration-300 cursor-pointer select-none	 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Profile
                   </a>
@@ -148,7 +144,7 @@ function TopBar() {
                       setModalActive(true);
                       setModalContent(<ChangePasswordForm />);
                     }}
-                    className="block cursor-pointer select-none	 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block hover:text-blue transition duration-300 cursor-pointer select-none	 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Change Password
                   </a>
@@ -161,7 +157,7 @@ function TopBar() {
                       localStorage.clear();
                       navigate("/login");
                     }}
-                    className="block cursor-pointer select-none	 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="block hover:text-red transition duration-300 cursor-pointer select-none	 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Logout
                   </a>

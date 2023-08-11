@@ -9,6 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRegisterMutation } from "../../services/authApi";
 import Swal from "sweetalert2";
+import bg1 from "../../assets/loginBG.jpeg";
+import bg4 from "../../assets/loginBG4.jpg";
+import bg2 from "../../assets/loginBG2.jpg";
+import bg3 from "../../assets/loginBG3.jpg";
+import logo from "../../assets/svg/logo-no-background.svg";
 
 const registerSchema = z
   .object({
@@ -32,6 +37,7 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 function Signup() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const backgrounds = [bg1, bg2, bg3, bg4];
 
   const [registerUser, { data: registerData, isSuccess, isError, error }] =
     useRegisterMutation();
@@ -71,25 +77,27 @@ function Signup() {
     }
   };
   return (
-    <div className="flex justify-between max-w-screen-lg m-auto items-center h-screen">
-      <div>
-        <h1 className=" text-7xl text-blue font-bold">WinG</h1>
-      </div>
-
-      <div className="bg-white w-4/12 rounded p-4">
+    <div className="flex flex-row relative justify-between  m-auto items-center h-screen">
+      <div className="bg-white relative h-full basis-1/3 rounded p-4 py-12">
+        <div className="flex items-center justify-center mb-3 py-auto">
+          <div className="w-14 h-14 ">
+            <img className=" rounded" src={logo} alt="app icon" />
+            {/* <h1 className=" text-5xl text-center mb-3  font-bold">WinG</h1> */}
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            className="bg-white w-full border-2 p-2 rounded mb-2"
+            className="bg-white w-full border-2 p-2 rounded mb-4"
             type="fullName"
             id="fullName"
             {...register("fullName")}
-            placeholder="FullName"
+            placeholder="Full Name"
           />
           {errors.fullName && (
             <span className="mb-5 text-red">{errors.fullName.message}</span>
           )}
           <input
-            className="bg-white w-full border-2 p-2 rounded mb-2"
+            className="bg-white w-full border-2 p-2 rounded mb-4"
             type="email"
             id="email"
             {...register("email")}
@@ -99,7 +107,7 @@ function Signup() {
             <span className="mb-5 text-red">{errors.email.message}</span>
           )}
           <input
-            className="bg-white w-full border-2 p-2 rounded mb-2"
+            className="bg-white w-full border-2 p-2 rounded mb-4"
             type="password"
             id="password"
             {...register("password")}
@@ -109,7 +117,7 @@ function Signup() {
             <span className="mb-5 text-red">{errors.password.message}</span>
           )}
           <input
-            className="bg-white w-full border-2 p-2 rounded mb-2"
+            className="bg-white w-full border-2 p-2 rounded mb-4"
             type="password"
             id="passwordConfirm"
             placeholder="Confirm password"
@@ -122,20 +130,26 @@ function Signup() {
           )}
 
           <button
-            className="bg-blue text-white mb-3 p-2 w-full rounded"
+            className=" border-green border-2 text-black hover:bg-green hover:border-transparent hover:shadow-lg focus:outline-none transition duration-300 hover:text-white mb-5 p-2 w-full rounded"
             type="submit"
           >
             Sign up
           </button>
 
-          <p className="block text-center mb-3">or</p>
           <Link
-            className="bg-green-200 p-2 rounded  block text-center"
+            className="hover:bg-green transition duration-300  text-black bottom-3 bg-transparent border-green border-2 left-3 right-3 absolute p-2 rounded  block text-center"
             to="/login"
           >
             Back to Log in
           </Link>
         </form>
+      </div>
+      <div className="basis-2/3 h-full">
+        <img
+          className="object-cover opacity-80 h-full"
+          src={backgrounds[Math.floor(Math.random() * 3 + 1)]}
+          alt=""
+        />
       </div>
     </div>
   );

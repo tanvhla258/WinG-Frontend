@@ -6,7 +6,7 @@ import {
 } from "../../services/postApi";
 import Swal from "sweetalert2";
 import { useAppSelector } from "../../hooks";
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../components/AppLayout";
 import { IoMdSend } from "react-icons/io";

@@ -2,8 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials} from "../features/auth/authSlice"
 import type { RootState } from '../redux/store'; // Import the RootState type if it's defined in your Redux store file
 import { URL } from '../constant/constant';
-import { logout } from '../features/user/userSlice';
+import { logout, setUser } from '../features/user/userSlice';
 import { clearToken } from '../features/auth/authSlice';
+import { useGetUserQuery } from './userApi';
 const baseQuery = fetchBaseQuery({
     baseUrl: URL,
     prepareHeaders: (headers, { getState }) => {
@@ -29,9 +30,8 @@ const baseQueryRefresh = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-    console.log(result)
+    // console.log(result)
     if (result?.error?.status === 'FETCH_ERROR') {
-        console.log('sending refresh token')
         // send refresh token to get new access token 
         const refreshResult = await baseQueryRefresh('/auth/token/refresh', api, extraOptions)
         if (refreshResult?.data) { 
@@ -39,6 +39,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
             // store the new token 
             api.dispatch(setCredentials({...token,accessToken:refreshResult.data.detail}))
             localStorage.setItem("accessToken",refreshResult.data.detail)
+
             // retry the original query with new access token 
             result = await baseQuery(args, api, extraOptions)
         } else {
@@ -47,7 +48,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
             api.dispatch(clearToken());
             localStorage.clear();
             window.location.href="./login"
-            return
         }
     }
 

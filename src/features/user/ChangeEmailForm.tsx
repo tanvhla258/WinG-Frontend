@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import SetAvatarForm from "./SetAvatarForm";
-import Avatar from "../../components/Avatar";
+import Avatar from "./Avatar";
 import { useAppSelector } from "../../hooks";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
@@ -8,6 +8,7 @@ import { useGlobalContext } from "../../components/AppLayout";
 import { useEditEmailMutation } from "../../services/userApi";
 import VerifiCodeForm from "./VerifyCodeForm";
 import Loader from "../../components/Loader";
+import Button from "../../components/Button";
 interface FormValues {
   //   currentPassword: string;
   newPassword: string;
@@ -76,15 +77,10 @@ function ChangeEmailForm() {
           />
         </div>
         <div className="absolute right-8 flex gap-3 bottom-8">
-          <button
-            onClick={() => setModalActive(false)}
-            className="bg-slate-200 p-2 rounded"
-          >
+          <Button onClick={() => setModalActive(false)} variant="secondary">
             Cancel
-          </button>
-          <button className="bg-blue text-white p-2 rounded" type="submit">
-            Send
-          </button>
+          </Button>
+          <Button type="submit">Send</Button>
         </div>
       </form>
     </div>

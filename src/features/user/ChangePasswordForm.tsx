@@ -8,6 +8,7 @@ import VerifiCodeForm from "./VerifyCodeForm";
 import Loader from "../../components/Loader";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Button from "../../components/Button";
 // interface FormValues {
 //   //   currentPassword: string;
 //   newPassword: string;
@@ -87,15 +88,10 @@ function ChangePasswordForm() {
         </div>
         {isLoading && <Loader />}
         <div className="absolute right-8 flex gap-3 bottom-8">
-          <button
-            onClick={() => setModalActive(false)}
-            className="bg-slate-200 p-2 rounded"
-          >
+          <Button variant="secondary" onClick={() => setModalActive(false)}>
             Cancel
-          </button>
-          <button className="bg-blue text-white p-2 rounded" type="submit">
-            Send
-          </button>
+          </Button>
+          <Button type="submit">Send</Button>
         </div>
       </form>
     </div>

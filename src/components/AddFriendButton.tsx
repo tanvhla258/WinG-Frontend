@@ -11,6 +11,7 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import { TbUserCancel } from "react-icons/tb";
 import { FaUserFriends } from "react-icons/fa";
 import { useAppSelector } from "../hooks";
+import Button from "./Button";
 
 function AddFriendButton({
   targetUserId,
@@ -43,85 +44,70 @@ function AddFriendButton({
     );
   if (data?.status === null)
     return (
-      <button
+      <Button
         onClick={async () => {
           await addFriend(targetUserId);
           refetch();
         }}
-        className={`text-white flex  items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
+        icon={<AiOutlineUserAdd />}
       >
-        <AiOutlineUserAdd />
         Add friend
-        <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
-      </button>
+      </Button>
     );
   if (data?.status === "PENDING") {
     if (data?.user_1 === currentUser?.id)
       return (
-        <button
+        <Button
           onClick={async () => {
             console.log("cancel");
             await cancelRequest(targetUserId);
             refetch();
           }}
-          className={`text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
+          icon={<TbUserCancel />}
         >
-          <TbUserCancel />
           Cancel Request
-          <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
-        </button>
+        </Button>
       );
     else
       return (
         <div className="flex gap-2">
-          <button
+          <Button
             onClick={async () => {
               await accept(targetUserId);
               refetch();
             }}
-            className={`text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
+            icon={<AiOutlineUserAdd />}
           >
-            <AiOutlineUserAdd />
-            Accept Request
-            <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
-          </button>
-          <button
+            Accept
+          </Button>
+          <Button
+            variant="secondary"
             onClick={async () => {
               console.log("cancel");
               await cancelRequest(targetUserId);
               refetch();
             }}
-            className={`text-black justify-between  flex items-center gap-2 relative bg-slate-200 hover: p-2 rounded ${textSize}`}
+            icon={<TbUserCancel />}
           >
-            <TbUserCancel />
             Cancel
-            <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
-          </button>
+          </Button>
         </div>
       );
   }
   if (data?.status === "FRIEND") {
     return (
       <div className="flex gap-2">
-        <button
-          disabled
-          className={`text-white flex items-center gap-2 relative bg-blue hover: p-2 rounded ${textSize}`}
-        >
-          <FaUserFriends />
-          Friend
-          <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
-        </button>
-        <button
+        <Button icon={<FaUserFriends />}>Friend</Button>
+        <Button
+          variant="secondary"
+          icon={<TbUserCancel />}
           onClick={async () => {
             await unfriend(targetUserId);
             refetch();
           }}
-          className={`text-black flex items-center gap-2 relative bg-slate-200 hover: p-2 rounded ${textSize}`}
         >
-          <TbUserCancel />
           Unfriend
-          <div className="absolute hover:bg-slate-600 hover:opacity-10 inset-0"></div>
-        </button>
+        </Button>
       </div>
     );
   }

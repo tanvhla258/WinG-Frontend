@@ -3,14 +3,14 @@ import { IComment, IPost, IUser } from "../../types/model";
 import { useGlobalContext } from "../../components/AppLayout";
 import Post from "./Post";
 import CommentForm from "./CommentForm";
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import Comment from "./Comment";
 import { useGetCommentsQuery } from "../../services/postApi";
 import Loader from "../../components/Loader";
 import { useAppSelector } from "../../hooks";
 interface ICommentBox {
   post: IPost;
-  user: IUser;
+  user: IUser | null;
 }
 
 function CommentBox({ post, user }: ICommentBox) {

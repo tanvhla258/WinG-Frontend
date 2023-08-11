@@ -1,5 +1,5 @@
 import { IComment } from "../../types/model";
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../components/AppLayout";
 import { BsThreeDots } from "react-icons/bs";
@@ -12,6 +12,7 @@ import EditCommentForm from "./EdiCommentForm";
 import { userApi } from "../../services/userApi";
 import { useAppSelector } from "../../hooks";
 import { getTimeDifferenceFromNow } from "../../helper/convert";
+import Swal from "sweetalert2";
 function Comment({
   comment,
   postOwner,
@@ -35,7 +36,17 @@ function Comment({
     { isLoading: deleteLoading, isSuccess: deleteSuccess },
   ] = useDeleteCommentMutation();
   const user = useAppSelector((state) => state.user.user);
-  useEffect(function () {}, [updateSuccess, deleteSuccess]);
+  useEffect(
+    function () {
+      if (updateSuccess) {
+        Swal.fire({ title: "Update successfully" });
+      }
+      if (deleteSuccess) {
+        Swal.fire({ title: "Delete successfully" });
+      }
+    },
+    [updateSuccess, deleteSuccess]
+  );
 
   return !openEditForm ? (
     <div className="flex mb-6 relative  gap-2">

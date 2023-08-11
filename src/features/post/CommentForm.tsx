@@ -3,12 +3,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useCreateCommentMutation } from "../../services/postApi";
 import Swal from "sweetalert2";
 import { useAppSelector } from "../../hooks";
-import Avatar from "../../components/Avatar";
+import Avatar from "../user/Avatar";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../components/AppLayout";
 import { IoMdSend } from "react-icons/io";
 import EmojiPicker from "emoji-picker-react";
 import { BiSmile } from "react-icons/bi";
+import Button from "../../components/Button";
 
 interface FormValues {
   content: string;
@@ -61,9 +62,11 @@ function CommentForm({ postId }: { postId: string }) {
             }}
           />
           {emojiPopup ? <EmojiPicker /> : <></>}
-          <button className=" bg-green-200 p-2 rounded" type="submit">
-            <IoMdSend fill="green" />
-          </button>
+          <Button
+            variant="success"
+            type="submit"
+            icon={<IoMdSend fill="green" />}
+          ></Button>
         </div>
       </form>
     </div>

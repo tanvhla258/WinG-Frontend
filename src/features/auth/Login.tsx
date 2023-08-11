@@ -12,7 +12,13 @@ import { useAppDispatch } from "../../hooks";
 import { setCredentials } from "./authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
+import bg1 from "../../assets/loginBG.jpeg";
+import bg4 from "../../assets/loginBG4.jpg";
+import bg2 from "../../assets/loginBG2.jpg";
+import bg3 from "../../assets/loginBG3.jpg";
+import logo from "../../assets/svg/logo-no-background.svg";
+import Button from "../../components/Button";
+import { FcGoogle } from "react-icons/fc";
 const loginSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
     message: "Must be a valid email",
@@ -24,6 +30,8 @@ const loginSchema = z.object({
 
 type LoginSchema = z.infer<typeof loginSchema>;
 function Login() {
+  const backgrounds = [bg1, bg2, bg3, bg4];
+  console.log(Math.random() * 3 + 1);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginUser, { data: loginData, isSuccess, isError, error }] =
@@ -85,12 +93,14 @@ function Login() {
   };
 
   return (
-    <div className="flex justify-between max-w-screen-lg m-auto items-center h-screen">
-      <div>
-        <h1 className=" text-7xl text-blue font-bold">WinG</h1>
-      </div>
-
-      <div className="bg-white w-4/12  rounded p-4">
+    <div className="flex flex-row relative justify-between  m-auto items-center h-screen">
+      <div className="bg-white relative h-full basis-1/3 rounded p-4 py-12">
+        <div className="flex items-center justify-center mb-3 py-auto">
+          <div className="w-14 h-14 ">
+            <img className=" rounded" src={logo} alt="app icon" />
+            {/* <h1 className=" text-5xl text-center mb-3  font-bold">WinG</h1> */}
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             className={`bg-white w-full border-2 focus:outline-blue p-2 rounded mb-5 `}
@@ -117,28 +127,36 @@ function Login() {
           )}
 
           <button
-            className="bg-blue text-white mb-3 p-2 w-full rounded"
+            className="text-blue border-blue border-2 hover:bg-blue hover:border-transparent hover:shadow-lg focus:outline-none transition duration-300 hover:text-white mb-5 p-2 w-full rounded"
             type="submit"
           >
             Login
           </button>
         </form>
-        <button
+        <Button
+          variant="secondary"
+          option="w-full justify-center mb-4"
+          icon={<FcGoogle size={24} />}
           onClick={() => handleGoogleLogin()}
-          className="bg-yellow text-white mb-3 p-2 w-full rounded"
         >
           Login with google account
-        </button>
-        <Link className="text-blue mb-3  underline block  text-center" to="#">
+        </Button>
+        <Link className="text-blue mb-4  underline block  text-center" to="#">
           Forgotten password?
         </Link>
-        <p className="block text-center mb-3">or</p>
         <Link
-          className="bg-green-200 p-2 rounded  block text-center"
+          className="text-blue bottom-3 left-3 right-3 absolute border-blue border-2 hover:bg-blue hover:text-white hover:border-transparent hover:shadow-lg focus:outline-none transition duration-300 p-2 rounded  block text-center"
           to="/signup"
         >
           Create new account
         </Link>
+      </div>
+      <div className="basis-2/3 h-full">
+        <img
+          className="object-cover opacity-80 h-full"
+          src={backgrounds[Math.floor(Math.random() * 3 + 1)]}
+          alt=""
+        />
       </div>
     </div>
   );

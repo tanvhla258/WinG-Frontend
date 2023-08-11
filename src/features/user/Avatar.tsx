@@ -1,5 +1,5 @@
 import React from "react";
-import { URL } from "../constant/constant";
+import { URL } from "../../constant/constant";
 import classNames from "classnames";
 function Avatar({
   src,

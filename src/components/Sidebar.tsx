@@ -1,7 +1,7 @@
 import React from "react";
 import { IconType } from "react-icons";
 import { AiFillHome } from "react-icons/ai";
-import Avatar from "./Avatar";
+import Avatar from "../features/user/Avatar";
 import { useAppSelector } from "../hooks";
 import { FaGamepad, FaLayerGroup, FaUserFriends } from "react-icons/fa";
 import { BsFillBookmarkFill } from "react-icons/bs";
@@ -29,10 +29,13 @@ function Sidebar() {
       },
     },
     {
-      link: "/",
+      link: `/profile?username=${user?.username}/friends`,
       text: "Friends",
       icon: <FaUserFriends size={30} className="fill-blue" />,
       active: false,
+      onClick: () => {
+        navigate(`/profile/friends?username=${user?.username}`);
+      },
     },
     {
       link: "/",

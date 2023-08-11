@@ -1,121 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { URL } from "../constant/constant";
-import { useForm, SubmitHandler } from "react-hook-form";
-import Post from "../features/post/Post";
-import CreatePost from "../features/post/CreatePost";
-import TopBar from "../components/TopBar";
-import Avatar from "../components/Avatar";
-import { useGlobalContext } from "../components/AppLayout";
-import SetAvatarForm from "../features/user/SetAvatarForm";
-import PostList from "../features/post/PostList";
-import { useGetUserProfileQuery } from "../services/publicApi";
+import { Route, useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "../components/Loader";
-import AddFriendButton from "../components/AddFriendButton";
-import { useGetProfilePostQuery } from "../services/postApi";
-import { AiFillSchedule, AiOutlineMail } from "react-icons/ai";
-import {
-  useAcceptInviteMutation,
-  useGetListFriendQuery,
-} from "../services/relationshipApi";
+import { useGetListFriendQuery } from "../services/relationshipApi";
 import { useAppSelector } from "../hooks";
-import { FiEdit2 } from "react-icons/fi";
-import EditProfileForm from "../features/user/EditProfileForm";
-import ChangePasswordForm from "../features/user/VerifyCodeForm";
-import TopBarDropdown from "../components/TopBarDropdown";
-import ChangeEmailForm from "../features/user/ChangeEmailForm";
+import { Outlet } from "react-router-dom";
+
+import ProfileHeading from "../components/ProfileHeading";
 function Profile() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const currentUser = useAppSelector((state) => state.user.user);
   const username = searchParams.get("username");
   const id = searchParams.get("id");
-  const {
-    data: listFriend,
-    isLoading: listFriendLoading,
-    refetch,
-  } = useGetListFriendQuery(currentUser?.id === id ? null : id);
+  // const {
+  //   data: listFriend,
+  //   isLoading: listFriendLoading,
+  //   refetch,
+  // } = useGetListFriendQuery(currentUser?.id === id ? null : id);
 
-  const { data: user, isLoading } = useGetUserProfileQuery({
-    username: username,
-    id,
-  });
-  const { data: postData, isLoading: postLoaidng } = useGetProfilePostQuery({
-    username,
-    id,
-  });
-  useEffect(
-    function () {
-      refetch();
-    },
-    [id, username]
-  );
-  const { setModalActive, setModalContent } = useGlobalContext();
-  if (isLoading && postLoaidng) return <Loader />;
+  // const { data: postData, isLoading: postLoading } = useGetProfilePostQuery({
+  //   username,
+  //   id,
+  // });
+  // useEffect(
+  //   function () {
+  //     refetch();
+  //   },
+  //   [id, username]
+  // );
+  // const { setModalActive, setModalContent } = useGlobalContext();
   return (
     <div>
       <div className="max-w-screen-lg mt-5 m-auto">
-        <div className="bg-white shadow-md rounded mb-8  p-6 flex justify-between items-end">
-          <div className="flex gap-3 items-end">
-            <Avatar
-              onClick={() => {
-                setModalActive(true);
-                setModalContent(<SetAvatarForm />);
-              }}
-              src={user?.avatarURL}
-              size={"h-32 w-32"}
-              ring={true}
-            />
-
-            <div className="flex flex-col gap-2">
-              <p className="font-bold text-4xl">{user?.full_name}</p>
-              <p className="text-slate-500 hidden sm:flex hover:underline cursor-pointer">
-                {listFriend?.length} friends
-              </p>
-              <div className="mt-3 hidden sm:flex  -space-x-1 overflow-hidden">
-                {listFriend?.map((friend: any) => {
-                  return (
-                    <img
-                      onClick={() => navigate(`/profile?id=${friend?.user_id}`)}
-                      key={friend.id}
-                      className="inline-block cursor-pointer object-cover h-10 w-10 rounded-full ring-2 ring-white"
-                      src={`${URL}${friend.avatar}`}
-                      alt="{user.handle}"
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          <div className="flex  gap-2">
-            <AddFriendButton targetUserId={user?.id} />
-            {(currentUser?.id === id || currentUser?.username === username) && (
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setModalActive(true);
-                    setModalContent(<EditProfileForm />);
-                  }}
-                  className="`trasition duration-100  ease-in text-black  flex items-center gap-2 relative bg-slate-300 hover:bg-slate-400 p-2 rounded `"
-                >
-                  <FiEdit2 />
-                  Edit profile
-                </button>
-                <button
-                  onClick={() => {
-                    setModalActive(true);
-                    setModalContent(<ChangeEmailForm />);
-                  }}
-                  className="`trasition duration-100  ease-in text-black  flex items-center gap-2 relative bg-slate-300 hover:bg-slate-400 p-2 rounded `"
-                >
-                  <AiOutlineMail />
-                  Edit email
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex gap-4  flex-col md:flex-row   justify-between">
+        <ProfileHeading />
+        {/* <div className="flex gap-4  flex-col md:flex-row   justify-between">
           <div className="basis-2/5 flex-col flex gap-4">
             <div className=" bg-white shadow h-fit rounded p-3">
               <h2 className="mb-6 font-semibold text-xl">Intro</h2>
@@ -141,13 +59,11 @@ function Profile() {
                 {listFriend?.map((friend: any) => {
                   return (
                     <div
+                      key={friend.id}
                       className="w-28  relative  rounded"
                       onClick={() => navigate(`/profile?id=${friend?.user_id}`)}
                     >
-                      <div
-                        key={friend.id}
-                        className="w-28 h-28 relative  rounded"
-                      >
+                      <div className="w-28 h-28 relative  rounded">
                         <img
                           src={`${URL}${friend.avatar}`}
                           alt=""
@@ -170,7 +86,10 @@ function Profile() {
             <div className="mb-3"></div>
             <PostList posts={postData} />
           </div>
-        </div>
+        </div> */}
+        <Outlet />
+        {/* <Route path="/" element={<ProfileInfo />} /> */}
+        {/* <Route path="friends" element={<Friends />} /> */}
       </div>
     </div>
   );

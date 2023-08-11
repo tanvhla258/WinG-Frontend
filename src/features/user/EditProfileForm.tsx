@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import SetAvatarForm from "./SetAvatarForm";
-import Avatar from "../../components/Avatar";
+import Avatar from "./Avatar";
 import { useAppSelector } from "../../hooks";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
